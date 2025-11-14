@@ -2,17 +2,13 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # ------------------------------------------------------------------
 
-module Segy
+function load(fname::AbstractString)
+  open(fname) do io
+    load(io)
+  end
+end
 
-using StringEncodings
-using PrettyTables
-
-# header definitions
-include("headers/textual.jl")
-include("headers/binary.jl")
-include("headers/trace.jl")
-
-# main functionality
-include("load.jl")
-
+function load(io::IO)
+  theader = textualheader(io)
+  bheader = binaryheader(io)
 end
