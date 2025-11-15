@@ -33,8 +33,8 @@ function binaryheader(io::IO)
     ntoh(read(io, type))
   end
 
-  # reinterpret fields as struct
-  reinterpret(BinaryHeader, (fields1..., fields2...))
+  # build binary header
+  BinaryHeader(fields1..., fields2...)
 end
 
 """
