@@ -2,13 +2,19 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # ------------------------------------------------------------------
 
-function load(fname::AbstractString)
-  open(fname) do io
-    load(io)
-  end
-end
+"""
+    load(fname::AbstractString)
 
+Load SEGY from the file `fname`.
+"""
+load(fname::AbstractString) = open(load, fname)
+
+"""
+    load(io::IO)
+
+Load SEGY from the IO stream `io`.
+"""
 function load(io::IO)
-  theader = textualheader(io)
-  bheader = binaryheader(io)
+  th = textualheader(io)
+  bh = binaryheader(io)
 end

@@ -2,12 +2,18 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # ------------------------------------------------------------------
 
-function binaryheader(fname::AbstractString)
-  open(fname) do io
-    binaryheader(io)
-  end
-end
+"""
+    binarheader(fname::AbstractString) -> BinaryHeader
 
+Extract the SEGY binary header from the file `fname`.
+"""
+binaryheader(fname::AbstractString) = open(binaryheader, fname)
+
+"""
+    binarheader(io::IO) -> BinaryHeader
+
+Extract the SEGY binary header from the IO stream `io`.
+"""
 function binaryheader(io::IO)
   # read section 1 (bytes 3200 to 3300)
   seek(io, 3200)
@@ -23,9 +29,16 @@ function binaryheader(io::IO)
     ntoh(read(io, type))
   end
 
+  # reinterpret fields as BinaryHeader
   reinterpret(BinaryHeader, (fields1..., fields2...))
 end
 
+"""
+    BinaryHeader(fields...)
+
+SEGY binary header with all `fields` from
+revisions 1.0, 2.0, and 2.1 of the standard.
+"""
 struct BinaryHeader
   JOB_ID::Int32
   LINE_NO::UInt32
@@ -74,18 +87,23 @@ struct BinaryHeader
   TRAILER_RECORDS::UInt32
 end
 
+# the first section of the SEGY binary header
+# corresponds to all fields up to ENDIAN_CONSTANT
 function section1(::Type{BinaryHeader})
   fields = fieldnames(BinaryHeader)
   endian = findfirst(==(:ENDIAN_CONSTANT), fields)
   fields[begin:endian]
 end
 
+# the second section of the SEGY binary header
+# corresponds to all fields after ENDIAN_CONSTANT
 function section2(::Type{BinaryHeader})
   fields = fieldnames(BinaryHeader)
   endian = findfirst(==(:ENDIAN_CONSTANT), fields)
   fields[endian+1:end]
 end
 
+# display binary header in pretty table format
 function Base.show(io::IO, header::BinaryHeader)
   field = collect(fieldnames(typeof(header)))
   value = getfield.(Ref(header), field)
