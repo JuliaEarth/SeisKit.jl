@@ -15,13 +15,16 @@ binaryheader(fname::AbstractString) = open(binaryheader, fname)
 Read the SEG-Y binary header from the IO stream `io`.
 """
 function binaryheader(io::IO)
+  # swap bytes if necessary
+  swapbytes = isbigendian(io) ? ntoh : ltoh
+
   # seek start of binary header
   seek(io, 3200)
 
   # read section 1 (bytes 3201 to 3300)
   fields1 = map(section1(BinaryHeader)) do field
     type = fieldtype(BinaryHeader, field)
-    ntoh(read(io, type))
+    swapbytes(read(io, type))
   end
 
   # skip unassigned section (bytes 3301 to 3500)
@@ -30,12 +33,28 @@ function binaryheader(io::IO)
   # read section 2 (bytes 3501 to 3532)
   fields2 = map(section2(BinaryHeader)) do field
     type = fieldtype(BinaryHeader, field)
-    ntoh(read(io, type))
+    swapbytes(read(io, type))
   end
 
   # build binary header
   BinaryHeader(fields1..., fields2...)
 end
+
+isbigendian(fname::AbstractString) = open(isbigendian, fname)
+
+function isbigendian(io::IO)
+  # SEG-Y revision ≤ 1.0 files are always big-endian
+  # SEG-Y revision ≥ 2.0 introduced a constant from
+  # byte 3297 to 3300 to indicate the endianness
+  # if the constant is different than 33620995,
+  # then the file is big-endian
+  seek(io, 3296)
+  read(io, UInt32) != 33620995
+end
+
+# ------------------
+# HEADER DEFINITION
+# ------------------
 
 """
     BinaryHeader(fields...)
