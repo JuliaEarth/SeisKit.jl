@@ -103,7 +103,7 @@ function section2(::Type{BinaryHeader})
   fields[endian+1:end]
 end
 
-# display binary header in pretty table format
+# display SEGY binary header in pretty table format
 function Base.show(io::IO, header::BinaryHeader)
   field = collect(fieldnames(typeof(header)))
   value = getfield.(Ref(header), field)
