@@ -40,6 +40,7 @@ function binaryheader(io::IO)
   BinaryHeader(fields1..., fields2...)
 end
 
+# tells whether the SEG-Y file is big-endian
 isbigendian(fname::AbstractString) = open(isbigendian, fname)
 
 function isbigendian(io::IO)
