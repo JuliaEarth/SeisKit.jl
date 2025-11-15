@@ -2,6 +2,53 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # ------------------------------------------------------------------
 
+floattype(fname::AbstractString) = open(floattype, fname)
+
+function floattype(io::IO)
+  # swap bytes if necessary
+  swapbytes = isbigendian(io) ? ntoh : ltoh
+
+  # SEG-Y revision 0.0 uses 4-byte IBM floating point
+  version(io).major == 0 && return IBMFloat32
+
+  # SEG-Y revision 1.0 introduced the
+  # sample format code at bytes 3225-3226
+  # to indicate the floating point type:
+  # 1: 4-byte IBM floating point
+  # 2: 4-byte, twos's complement integer
+  # 3: 2-byte, twos's complement integer
+  # 4: 4-byte fixed-point with gain (obsolete)
+  # 5: 4-byte IEEE floating point
+  # 6: 8-byte IEEE floating point (since revision 2.0)
+  # 7: 3-byte, twos's complement integer (since revision 2.0)
+  # 8: 1-byte, twos's complement integer
+  # 9: 8-byte, twos's complement integer (since revision 2.0)
+  # 10: 4-byte, unsigned integer (since revision 2.0)
+  # 11: 2-byte, unsigned integer (since revision 2.0)
+  # 12: 8-byte, unsigned integer (since revision 2.0)
+  # 15: 3-byte, unsigned integer (since revision 2.0)
+  # 16: 1-byte, unsigned integer (since revision 2.0)
+  seek(io, 3224)
+  code = swapbytes(read(io, UInt16))
+  if code == 1
+    IBMFloat32
+  elseif code == 5
+    Float32
+  elseif code == 6
+    Float64
+  elseif code == 10
+    UInt32
+  elseif code == 11
+    UInt16
+  elseif code == 12
+    UInt64
+  elseif code == 16
+    UInt8
+  else
+    error("Unsupported sample format code: $code")
+  end
+end
+
 # tells whether the SEG-Y file is big-endian
 isbigendian(fname::AbstractString) = open(isbigendian, fname)
 
@@ -26,5 +73,5 @@ function version(io::IO)
   seek(io, 3500)
   major = read(io, UInt8)
   minor = read(io, UInt8)
-  major, minor
+  (; major, minor)
 end
