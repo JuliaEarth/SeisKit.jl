@@ -5,14 +5,14 @@
 """
     traceheaders(fname::AbstractString) -> Vector{TraceHeader}
 
-Extract all SEGY trace headers from the file `fname`.
+Extract all SEG-Y trace headers from the file `fname`.
 """
 traceheaders(fname::AbstractString) = open(traceheaders, fname)
 
 """
     traceheaders(io::IO) -> Vector{TraceHeader}
 
-Extract all SEGY trace headers from the IO stream `io`.
+Extract all SEG-Y trace headers from the IO stream `io`.
 """
 function traceheaders(io::IO)
 end

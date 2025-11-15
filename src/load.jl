@@ -5,14 +5,14 @@
 """
     load(fname::AbstractString)
 
-Load SEGY from the file `fname`.
+Load SEG-Y from the file `fname`.
 """
 load(fname::AbstractString) = open(load, fname)
 
 """
     load(io::IO)
 
-Load SEGY from the IO stream `io`.
+Load SEG-Y from the IO stream `io`.
 """
 function load(io::IO)
   th = textualheader(io)

@@ -5,14 +5,14 @@
 """
     binarheader(fname::AbstractString) -> BinaryHeader
 
-Extract the SEGY binary header from the file `fname`.
+Extract the SEG-Y binary header from the file `fname`.
 """
 binaryheader(fname::AbstractString) = open(binaryheader, fname)
 
 """
     binarheader(io::IO) -> BinaryHeader
 
-Extract the SEGY binary header from the IO stream `io`.
+Extract the SEG-Y binary header from the IO stream `io`.
 """
 function binaryheader(io::IO)
   # read section 1 (bytes 3200 to 3300)
@@ -36,7 +36,7 @@ end
 """
     BinaryHeader(fields...)
 
-SEGY binary header with all `fields` from
+SEG-Y binary header with all `fields` from
 revisions 1.0, 2.0, and 2.1 of the standard.
 """
 struct BinaryHeader
@@ -87,7 +87,7 @@ struct BinaryHeader
   TRAILER_RECORDS::UInt32
 end
 
-# the first section of the SEGY binary header
+# the first section of the SEG-Y binary header
 # corresponds to all fields up to ENDIAN_CONSTANT
 function section1(::Type{BinaryHeader})
   fields = fieldnames(BinaryHeader)
@@ -95,7 +95,7 @@ function section1(::Type{BinaryHeader})
   fields[begin:endian]
 end
 
-# the second section of the SEGY binary header
+# the second section of the SEG-Y binary header
 # corresponds to all fields after ENDIAN_CONSTANT
 function section2(::Type{BinaryHeader})
   fields = fieldnames(BinaryHeader)
@@ -103,12 +103,12 @@ function section2(::Type{BinaryHeader})
   fields[endian+1:end]
 end
 
-# display SEGY binary header in pretty table format
+# display SEG-Y binary header in pretty table format
 function Base.show(io::IO, header::BinaryHeader)
   field = collect(fieldnames(typeof(header)))
   value = getfield.(Ref(header), field)
   pretty_table(io, (; field, value),
-    title="SEGY Binary Header",
+    title="SEG-Y Binary Header",
     fit_table_in_display_vertically=false,
     new_line_at_end=false,
     alignment=:l,
