@@ -7,6 +7,9 @@ module Segy
 using StringEncodings
 using PrettyTables
 
+# utility functions
+include("utils.jl")
+
 # header definitions
 include("headers/textual.jl")
 include("headers/binary.jl")
