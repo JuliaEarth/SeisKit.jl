@@ -10,6 +10,7 @@ using PrettyTables
 # header definitions
 include("headers/textual.jl")
 include("headers/binary.jl")
+include("headers/extended.jl")
 include("headers/trace.jl")
 
 # main functionality
