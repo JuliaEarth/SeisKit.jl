@@ -16,7 +16,7 @@ include("headers/binary.jl")
 include("headers/extended.jl")
 include("headers/trace.jl")
 
-# main functionality
+# main functions
 include("load.jl")
 
 end
