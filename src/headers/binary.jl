@@ -5,14 +5,14 @@
 """
     binarheader(fname::AbstractString) -> BinaryHeader
 
-Extract the SEG-Y binary header from the file `fname`.
+Read the SEG-Y binary header from the file `fname`.
 """
 binaryheader(fname::AbstractString) = open(binaryheader, fname)
 
 """
     binarheader(io::IO) -> BinaryHeader
 
-Extract the SEG-Y binary header from the IO stream `io`.
+Read the SEG-Y binary header from the IO stream `io`.
 """
 function binaryheader(io::IO)
   # seek start of binary header

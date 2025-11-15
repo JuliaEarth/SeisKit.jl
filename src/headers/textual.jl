@@ -5,14 +5,14 @@
 """
     textualheader(fname::AbstractString) -> String
 
-Extract the SEG-Y textual header from the file `fname`.
+Read the SEG-Y textual header from the file `fname`.
 """
 textualheader(fname::AbstractString) = open(textualheader, fname)
 
 """
     textualheader(io::IO) -> String
 
-Extract the SEG-Y textual header from the IO stream `io`.
+Read the SEG-Y textual header from the IO stream `io`.
 """
 function textualheader(io::IO)
   # decode first 3200 bytes as EBCDIC
