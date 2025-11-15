@@ -43,11 +43,13 @@ end
 isbigendian(fname::AbstractString) = open(isbigendian, fname)
 
 function isbigendian(io::IO)
-  # SEG-Y revision ≤ 1.0 files are always big-endian
+  # SEG-Y revision ≤ 1.0 files are always big-endian.
   # SEG-Y revision ≥ 2.0 introduced a constant from
-  # byte 3297 to 3300 to indicate the endianness
-  # if the constant is different than 33620995,
-  # then the file is big-endian
+  # byte 3297 to 3300 to indicate the endianness.
+  # If the constant is different than 33620995,
+  # the file is not little-endian. Hence, we can
+  # conclude that it is big-endian, regardless of
+  # the SEG-Y revision.
   seek(io, 3296)
   read(io, UInt32) != 33620995
 end
