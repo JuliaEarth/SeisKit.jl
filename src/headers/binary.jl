@@ -15,21 +15,25 @@ binaryheader(fname::AbstractString) = open(binaryheader, fname)
 Extract the SEG-Y binary header from the IO stream `io`.
 """
 function binaryheader(io::IO)
-  # read section 1 (bytes 3200 to 3300)
+  # seek start of binary header
   seek(io, 3200)
+
+  # read section 1 (bytes 3201 to 3300)
   fields1 = map(section1(BinaryHeader)) do field
     type = fieldtype(BinaryHeader, field)
     ntoh(read(io, type))
   end
 
-  # read section 2 (bytes 3500 to 3532)
-  seek(io, 3500)
+  # skip unassigned section (bytes 3301 to 3500)
+  skip(io, 200)
+
+  # read section 2 (bytes 3501 to 3532)
   fields2 = map(section2(BinaryHeader)) do field
     type = fieldtype(BinaryHeader, field)
     ntoh(read(io, type))
   end
 
-  # reinterpret fields as BinaryHeader
+  # reinterpret fields as struct
   reinterpret(BinaryHeader, (fields1..., fields2...))
 end
 
