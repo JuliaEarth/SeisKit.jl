@@ -26,6 +26,7 @@ If the fraction is zero, the value is zero regardless of the exponent.
 primitive type IBMFloat32 <: AbstractFloat 32 end
 
 function Base.convert(::Type{Float64}, x::IBMFloat32)
+  # extract sign, exponent, and fraction bits
   b = reinterpret(UInt32, x)
   s = b & 0x80000000
   e = b & 0x7f000000
@@ -34,26 +35,37 @@ function Base.convert(::Type{Float64}, x::IBMFloat32)
   # if fraction is zero, value is zero
   iszero(f) && return zero(Float64)
 
-  # shift sign bit to the rightmost position
-  sieee = Int64(s >> 31)
+  # position sign bit at the leftmost bit of 8 bytes
+  sieee = Int64(s) << 32
 
   # shift exponent bits to the right (3 bytes = 24 bits)
   # and multiply by 4 to convert from base 16 to base 2
   # hence, the resulting shift is 24 - 2 = 22 bits
   eieee = Int64(e >> 22)
 
-  # normalize fraction until the leading digit is equal to 1,
-  # and adjust the exponent accordingly (opposite shift)
-  d = f & 0x00f00000
-  while iszero(d)
-    f <<= 4
-    eieee -= 4
-    d = f & 0x00f00000
-  end
-  fieee = UInt64(f) << 32 # pad with zeros to the right
+  # exponent of 64 in base 16 means 0 in the IBM standard,
+  # and exponent of 1023 in base 2 means 0 in the IEEE standard
+  # hence, the bias adjustment is -(4*64) + 1023
+  eieee += (1023 - 4*64)
 
-  # what is the correct way to combine the parts into Float64?
-  sieee, eieee, fieee
+  # shift fraction bits to the left until the leading digit
+  # is equal to 1 (normalization), then shift one more bit
+  # to the left to ignore the leading 1 (implicit in IEEE)
+  shift = leading_zeros(f) - 8 # ignore sign and exponent bits
+  fieee = UInt64(f << (shift + 1))
+  eieee -= (shift + 1)
+
+  # pad fraction with zeros to the right, and since IEEE
+  # uses 52 bits for the fraction and IBM uses 24 bits,
+  # we need to shift an additional (52 - 24) bits to the left
+  fieee <<= (52 - 24)
+
+  # now that the exponent bits have been adjusted, shift
+  # them to their final position in the IEEE representation
+  eieee <<= 52
+
+  # reinterpret bits as Float64
+  reinterpret(Float64, sieee | eieee | fieee)
 end
 
 Base.read(io::IO, ::Type{IBMFloat32}) = reinterpret(IBMFloat32, read(io, UInt32))
