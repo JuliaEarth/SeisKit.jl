@@ -2,6 +2,7 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # ------------------------------------------------------------------
 
+# tells the floating point type used for samples in the SEG-Y file
 floattype(fname::AbstractString) = open(floattype, fname)
 
 function floattype(io::IO)
