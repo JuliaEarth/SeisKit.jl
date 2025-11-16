@@ -45,8 +45,8 @@ function Base.convert(::Type{Float64}, x::IBMFloat32)
 
   # exponent of 64 in base 16 means 0 in the IBM standard,
   # and exponent of 1023 in base 2 means 0 in the IEEE standard
-  # hence, the bias adjustment is -(4*64) + 1023
-  eieee += (1023 - 4*64)
+  # hence, the bias adjustment is 1023 - 4*64 = 767
+  eieee += 767
 
   # shift fraction bits to the left until the leading digit
   # is equal to 1 (normalization), then shift one more bit
@@ -57,8 +57,8 @@ function Base.convert(::Type{Float64}, x::IBMFloat32)
 
   # pad fraction with zeros to the right, and since IEEE
   # uses 52 bits for the fraction and IBM uses 24 bits,
-  # we need to shift an additional (52 - 24) bits to the left
-  fieee <<= (52 - 24)
+  # we need to shift 52 - 24 = 28 bits to the left
+  fieee <<= 28
 
   # now that the exponent bits have been adjusted, shift
   # them to their final position in the IEEE representation
