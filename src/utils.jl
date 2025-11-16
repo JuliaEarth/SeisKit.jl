@@ -33,10 +33,18 @@ function floattype(io::IO)
   code = swapbytes(read(io, UInt16))
   if code == 1
     IBMFloat32
+  elseif code == 2
+    Int32
+  elseif code == 3
+    Int16
   elseif code == 5
     Float32
   elseif code == 6
     Float64
+  elseif code == 8
+    Int8
+  elseif code == 9
+    Int64
   elseif code == 10
     UInt32
   elseif code == 11
