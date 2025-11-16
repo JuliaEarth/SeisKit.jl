@@ -55,7 +55,7 @@ function Base.convert(::Type{Float64}, x::IBMFloat32)
   # drop the implicit leading 1 from the IEEE fraction
   f = (f << 1) & 0x00ffffff
 
-  # adjust fraction and exponent bits accordingly
+  # define fraction and adjust exponent accordingly
   fieee = UInt64(f)
   eieee -= (k + 1)
 
