@@ -49,11 +49,14 @@ function Base.convert(::Type{Float64}, x::IBMFloat32)
   eieee += 767
 
   # shift fraction bits to the left until the leading digit
-  # is equal to 1 (normalization), then shift one more bit
-  # to the left to ignore the leading 1 (implicit in IEEE)
+  # is equal to 1 (normalization), and adjust exponent accordingly
   shift = leading_zeros(f) - 8 # ignore sign and exponent bits
-  fieee = UInt64(f << (shift + 1))
-  eieee -= (shift + 1)
+  fieee = UInt64(f << shift)
+  eieee -= shift
+
+  # drop the implicit leading 1 from the IEEE fraction
+  fieee &= 0x7fffffffffffffff
+  eieee -= 1
 
   # pad fraction with zeros to the right, and since IEEE
   # uses 52 bits for the fraction and IBM uses 24 bits,
