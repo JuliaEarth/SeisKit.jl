@@ -1,6 +1,11 @@
 using Segy
 using Test
 
+# list of tests
+testfiles = ["ibmfloat.jl"]
+
 @testset "Segy.jl" begin
-    # Write your tests here.
+  for testfile in testfiles
+    include(testfile)
+  end
 end
