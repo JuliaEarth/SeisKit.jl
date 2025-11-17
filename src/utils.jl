@@ -39,10 +39,10 @@ function nextendedheaders(io::IO)
   read(io, UInt16)
 end
 
-# tells the floating point type used for samples in the SEG-Y file
-floattype(fname::AbstractString) = open(floattype, fname)
+# tells the number type used for samples in the SEG-Y file
+numbertype(fname::AbstractString) = open(numbertype, fname)
 
-function floattype(io::IO)
+function numbertype(io::IO)
   # swap bytes if necessary
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
