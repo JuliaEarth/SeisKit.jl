@@ -16,8 +16,8 @@ Read the SEG-Y textual header from the IO stream `io`.
 """
 function textualheader(io::IO)
   # identify encoding from first byte
-  # ('C' is 0x43 in ASCII and 0xC3 in EBCDIC)
-  # and decode 3200 bytes accordingly
+  # 'C' is 0x43 in ASCII and 0xC3 in EBCDIC
   bytes = read(seekstart(io), 3200)
-  first(bytes) == 0x43 ? String(bytes) : decode(bytes, "EBCDIC-CP-US")
+  encoding = first(bytes) == 0x43 ? "ASCII" : "EBCDIC-CP-US"
+  decode(bytes, encoding)
 end
