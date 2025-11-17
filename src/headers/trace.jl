@@ -22,7 +22,7 @@ function traceheaders(io::IO)
   ntype = numbertype(io)
 
   # seek start of trace headers
-  seek(io, 3600 + nextendedheaders(io) * 3200)
+  seek(io, TEXTUAL_HEADER_SIZE + BINARY_HEADER_SIZE + nextendedheaders(io) * EXTENDED_HEADER_SIZE)
 
   # read all trace headers
   headers = TraceHeader[]

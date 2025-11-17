@@ -7,6 +7,9 @@ module Segy
 using StringEncodings
 using PrettyTables
 
+# SEG-Y constants
+include("consts.jl")
+
 # IBM floating point type
 include("ibmfloat.jl")
 

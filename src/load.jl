@@ -17,4 +17,7 @@ Load SEG-Y from the IO stream `io`.
 function load(io::IO)
   th = textualheader(io)
   bh = binaryheader(io)
+  eh = extendedheaders(io)
+  trh = traceheaders(io)
+  th, bh, eh, trh
 end

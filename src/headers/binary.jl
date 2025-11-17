@@ -19,7 +19,7 @@ function binaryheader(io::IO)
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
   # seek start of binary header
-  seek(io, 3200)
+  seek(io, TEXTUAL_HEADER_SIZE)
 
   # read section 1 (bytes 3201 to 3300)
   fields1 = map(section1(BinaryHeader)) do field
