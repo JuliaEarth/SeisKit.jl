@@ -37,10 +37,30 @@ function floattype(io::IO)
     Int32
   elseif code == 3
     Int16
+  elseif code == 4
+    error("""
+      4-byte fixed-point with gain is not supported.
+
+      If you really need to load SEG-Y files with this
+      data type, please consider submitting a pull request
+      to add the FixedPointNumbers.jl package as a dependency
+      and replace this error by the appropriate `Fixed` type.
+      """
+    )
   elseif code == 5
     Float32
   elseif code == 6
     Float64
+  elseif code == 7
+    error("""
+      3-byte signed integer (Int24) is not supported.
+
+      If you really need to load SEG-Y files with this
+      data type, please consider submitting a pull request
+      to add the BitIntegers.jl package as a dependency and
+      replace this error by `Int24`.
+      """
+    )
   elseif code == 8
     Int8
   elseif code == 9
@@ -51,10 +71,20 @@ function floattype(io::IO)
     UInt16
   elseif code == 12
     UInt64
+  elseif code == 15
+    error("""
+      3-byte unsigned integer (UInt24) is not supported.
+
+      If you really need to load SEG-Y files with this
+      data type, please consider submitting a pull request
+      to add the BitIntegers.jl package as a dependency and
+      replace this error by `UInt24`.
+      """
+    )
   elseif code == 16
     UInt8
   else
-    error("Unsupported sample format code: $code")
+    error("Unexpected sample format code: $code")
   end
 end
 
