@@ -115,13 +115,4 @@ function section2(::Type{BinaryHeader})
 end
 
 # display SEG-Y binary header in pretty table format
-function Base.show(io::IO, header::BinaryHeader)
-  field = collect(fieldnames(typeof(header)))
-  value = getfield.(Ref(header), field)
-  pretty_table(io, (; field, value),
-    title="SEG-Y Binary Header",
-    fit_table_in_display_vertically=false,
-    new_line_at_end=false,
-    alignment=:l,
-  )
-end
+Base.show(io::IO, header::BinaryHeader) = prettyheader(io, header, "SEG-Y Binary Header")

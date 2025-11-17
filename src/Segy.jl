@@ -12,6 +12,7 @@ include("ibmfloat.jl")
 
 # utility functions
 include("utils.jl")
+include("ioutils.jl")
 
 # header definitions
 include("headers/textual.jl")

@@ -131,3 +131,6 @@ struct TraceHeader
   SOURCE_CONSTANT_EXPONENT::Int16
   SOURCE_CONSTANT_UNIT::Int16
 end
+
+# display SEG-Y trace header in pretty table format
+Base.show(io::IO, header::TraceHeader) = prettyheader(io, header, "SEG-Y Trace Header")
