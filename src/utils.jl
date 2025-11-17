@@ -114,3 +114,13 @@ function version(io::IO)
   minor = read(io, UInt8)
   (; major, minor)
 end
+
+# number of extended headers in the SEG-Y file
+nextendedheaders(fname::AbstractString) = open(nextendedheaders, fname)
+
+function nextendedheaders(io::IO)
+  # SEG-Y revision ≥ 1.0 introduced the number of
+  # extended headers from byte 3505 to byte 3506.
+  seek(io, 3504)
+  read(io, UInt16)
+end
