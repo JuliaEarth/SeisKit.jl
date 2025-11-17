@@ -18,15 +18,27 @@ function traceheaders(io::IO)
   # swap bytes if necessary
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
+  # number type for samples
+  ntype = numbertype(io)
+
   # seek start of trace headers
   seek(io, 3600 + nextendedheaders(io) * 3200)
 
+  # read fields of trace header
   fields = map(fieldnames(TraceHeader)) do field
     type = fieldtype(TraceHeader, field)
     swapbytes(read(io, type))
   end
 
-  TraceHeader(fields...)
+  # build trace header
+  header = TraceHeader(fields...)
+
+  # skip trace samples
+  nsamples = header.NO_SAMPLES_IN_TRACE
+  nbytes = nsamples * sizeof(ntype)
+  skip(io, nbytes)
+
+  header
 end
 
 # ------------------
