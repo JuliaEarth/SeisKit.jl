@@ -24,21 +24,30 @@ function traceheaders(io::IO)
   # seek start of trace headers
   seek(io, 3600 + nextendedheaders(io) * 3200)
 
-  # read fields of trace header
-  fields = map(fieldnames(TraceHeader)) do field
-    type = fieldtype(TraceHeader, field)
-    swapbytes(read(io, type))
+  # read all trace headers
+  headers = TraceHeader[]
+  while !eof(io)
+    # read fields of trace header
+    fields = map(fieldnames(TraceHeader)) do field
+      type = fieldtype(TraceHeader, field)
+      swapbytes(read(io, type))
+    end
+
+    # skip unassigned section (bytes 233 to 240)
+    skip(io, 8)
+
+    # build trace header
+    header = TraceHeader(fields...)
+
+    # skip trace samples
+    skip(io, header.NO_SAMPLES_IN_TRACE * sizeof(ntype))
+
+    # save header and continue
+    push!(headers, header)
   end
 
-  # build trace header
-  header = TraceHeader(fields...)
-
-  # skip trace samples
-  nsamples = header.NO_SAMPLES_IN_TRACE
-  nbytes = nsamples * sizeof(ntype)
-  skip(io, nbytes)
-
-  header
+  # return trace headers as vector
+  headers
 end
 
 # ------------------
