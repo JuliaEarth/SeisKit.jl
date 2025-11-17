@@ -15,9 +15,13 @@ textualheader(fname::AbstractString) = open(textualheader, fname)
 Read the SEG-Y textual header from the IO stream `io`.
 """
 function textualheader(io::IO)
+  # read first 3200 bytes
+  bytes = read(seekstart(io), 3200)
+
   # identify encoding from first byte
   # 'C' is 0x43 in ASCII and 0xC3 in EBCDIC
-  bytes = read(seekstart(io), 3200)
   encoding = first(bytes) == 0x43 ? "ASCII" : "EBCDIC-CP-US"
+
+  # decode bytes with identified encoding
   decode(bytes, encoding)
 end
