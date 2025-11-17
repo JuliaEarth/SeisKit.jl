@@ -73,3 +73,5 @@ function Base.convert(::Type{Float64}, x::IBMFloat32)
 end
 
 Base.read(io::IO, ::Type{IBMFloat32}) = reinterpret(IBMFloat32, read(io, UInt32))
+
+Base.bswap(x::IBMFloat32) = reinterpret(IBMFloat32, bswap(reinterpret(UInt32, x)))
