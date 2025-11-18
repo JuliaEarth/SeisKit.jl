@@ -6,6 +6,7 @@ module Segy
 
 using StringEncodings
 using PrettyTables
+using FieldViews
 
 # SEG-Y constants
 include("consts.jl")

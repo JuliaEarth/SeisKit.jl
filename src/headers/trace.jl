@@ -46,8 +46,8 @@ function traceheaders(io::IO)
     push!(headers, header)
   end
 
-  # return trace headers as vector
-  headers
+  # return trace headers as field views
+  FieldViewable(headers)
 end
 
 # ------------------
