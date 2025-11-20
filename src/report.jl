@@ -89,7 +89,12 @@ function reportissues(th, bh, eh, trh)
   if isempty(issues)
     println("No SEG-Y issues detected.")
   else
-    println(styled"{red:SEG-Y issues report:}\n")
-    print(join((styled"{red:$issue}" for issue in issues), "\n"))
+    println(styled"{red,underline:SEG-Y issues report:}\n")
+    println(join((styled"{red:$issue}" for issue in issues), "\n"))
+    print(styled"""
+      {red:You can fix most of these issues with `Segy.save(...)`
+      after loading the data with `Segy.load(...)`.}
+      """
+    )
   end
 end
