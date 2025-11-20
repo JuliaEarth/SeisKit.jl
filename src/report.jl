@@ -16,7 +16,11 @@ Report SEG-Y information from the IO stream `io`.
 """
 function report(io::IO)
   th, bh, eh, trh = headers(io)
+  printheaders(th, bh, eh, trh)
+  reportissues(th, bh, eh, trh)
+end
 
+function printheaders(th, bh, eh, trh)
   # textual header
   println(th)
   println()
@@ -30,7 +34,7 @@ function report(io::IO)
     foreach(h -> println(h), eh)
   end
 
-  # trace headers (non-zero fields only)
+  # trace header summary (non-zero fields only)
   field = Symbol[]
   minimum = Int[]
   maximum = Int[]
@@ -48,4 +52,7 @@ function report(io::IO)
     new_line_at_end=false,
     alignment=:l,
   )
+end
+
+function reportissues(th, bh, eh, trh)
 end
