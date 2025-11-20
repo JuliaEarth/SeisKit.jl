@@ -23,5 +23,25 @@ function textualheader(io::IO)
   encoding = first(bytes) == 0x43 ? "ASCII" : "EBCDIC-CP-US"
 
   # decode bytes with identified encoding
-  decode(bytes, encoding)
+  content = decode(bytes, encoding)
+
+  # return textual header
+  TextualHeader(content)
 end
+
+# ------------------
+# HEADER DEFINITION
+# ------------------
+
+"""
+    TextualHeader(content)
+
+SEG-Y textual header with string `content`.
+"""
+struct TextualHeader
+  content::String
+end
+
+# display SEG-Y textual header in pretty format
+Base.show(io::IO, header::TextualHeader) =
+  print(io, replace(header.content, r"(C\d+)" => s"\n\1"))
