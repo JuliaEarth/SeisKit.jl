@@ -18,8 +18,11 @@ function traceheaders(io::IO)
   # swap bytes if necessary
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
-  # number type for samples
-  ntype = numbertype(io)
+  # number type for samples (from binary header)
+  NUMBER_TYPE = numbertype(io)
+
+  # samples per trace (from binary header)
+  SAMPLES_PER_TRACE = samplespertrace(io)
 
   # seek start of trace headers
   seek(io, TEXTUAL_HEADER_SIZE + BINARY_HEADER_SIZE + nextendedheaders(io) * EXTENDED_HEADER_SIZE)
@@ -39,8 +42,14 @@ function traceheaders(io::IO)
     # build trace header
     header = TraceHeader(fields...)
 
+    # identify actual number of samples in trace
+    SAMPLES_IN_TRACE = header.SAMPLES_IN_TRACE
+    if iszero(SAMPLES_IN_TRACE)
+      SAMPLES_IN_TRACE = SAMPLES_PER_TRACE
+    end
+
     # skip trace samples
-    skip(io, header.SAMPLES_IN_TRACE * sizeof(ntype))
+    skip(io, SAMPLES_IN_TRACE * sizeof(NUMBER_TYPE))
 
     # save header and continue
     push!(headers, header)

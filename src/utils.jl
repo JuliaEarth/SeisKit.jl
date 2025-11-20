@@ -174,3 +174,16 @@ function ensembletype(io::IO)
     error("Unexpected trace sorting code: $code")
   end
 end
+
+# number of samples per trace in the SEG-Y binary header
+samplespertrace(fname::AbstractString) = open(samplespertrace, fname)
+
+function samplespertrace(io::IO)
+  # swap bytes if necessary
+  swapbytes = isbigendian(io) ? ntoh : ltoh
+
+  # SEG-Y revision ≥ 1.0 introduced the number
+  # of samples per trace at bytes 3221-3222
+  seek(io, 3220)
+  swapbytes(read(io, UInt16))
+end
