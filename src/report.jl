@@ -89,7 +89,7 @@ function reportissues(th, bh, eh, trh)
   if isempty(issues)
     println("No SEG-Y issues detected.")
   else
-    println("SEG-Y issues report:\n")
-    println(join(issues, "\n"))
+    println(styled"{red:SEG-Y issues report:}\n")
+    print(join((styled"{red:$issue}" for issue in issues), "\n"))
   end
 end

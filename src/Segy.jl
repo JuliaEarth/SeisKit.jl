@@ -5,6 +5,7 @@
 module Segy
 
 using StringEncodings
+using StyledStrings
 using PrettyTables
 using FieldViews
 
