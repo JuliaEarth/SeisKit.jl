@@ -3,17 +3,17 @@
 # ------------------------------------------------------------------
 
 """
-    load(fname::AbstractString)
+    report(fname::AbstractString)
 
-Load SEG-Y data from the file `fname`.
+Report SEG-Y information from the file `fname`.
 """
-load(fname::AbstractString) = open(load, fname)
+report(fname::AbstractString) = open(report, fname)
 
 """
-    load(io::IO)
+    report(io::IO)
 
-Load SEG-Y data from the IO stream `io`.
+Report SEG-Y information from the IO stream `io`.
 """
-function load(io::IO)
+function report(io::IO)
   th, bh, eh, trh = headers(io)
 end

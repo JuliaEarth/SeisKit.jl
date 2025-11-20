@@ -8,23 +8,19 @@ using StringEncodings
 using PrettyTables
 using FieldViews
 
-# SEG-Y constants
-include("consts.jl")
-
 # IBM floating point type
 include("ibmfloat.jl")
+
+# SEG-Y byte constants
+include("consts.jl")
 
 # utility functions
 include("utils.jl")
 include("ioutils.jl")
 
-# header definitions
-include("headers/textual.jl")
-include("headers/binary.jl")
-include("headers/extended.jl")
-include("headers/trace.jl")
-
 # main functions
+include("headers.jl")
+include("report.jl")
 include("load.jl")
 
 end
