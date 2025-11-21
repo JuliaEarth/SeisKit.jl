@@ -54,10 +54,10 @@ function traces2Dfixedlength(io, m, n)
   # pre-allocate data array with final number type
   data = Matrix{F}(undef, m, n)
 
-  # seek start of trace data
+  # seek start of trace headers
   seek(io, TEXTUAL_HEADER_SIZE + BINARY_HEADER_SIZE + nextendedheaders(io) * EXTENDED_HEADER_SIZE)
 
-  # load all traces
+  # load trace data
   for j in 1:n
     # skip trace header
     skip(io, TRACE_HEADER_SIZE)
