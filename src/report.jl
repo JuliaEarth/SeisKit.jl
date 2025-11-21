@@ -55,6 +55,17 @@ end
 
 function reportissues(th, bh, eh, trh)
   issues = String[]
+
+  if bh.TRACE_SORTING_CODE < 1
+    push!(issues, """
+      - Detected TRACE_SORTING_CODE < 1 in binary header.
+        The value should be greater than or equal to 1
+        to indicate the type of ensemble stored in the
+        file (e.g., pre-stack vs. post-stack).
+      """
+    )
+  end
+
   if any(iszero, trh.SAMPLES_IN_TRACE)
     push!(issues, """
       - Detected trace headers with SAMPLES_IN_TRACE=0.
@@ -63,6 +74,7 @@ function reportissues(th, bh, eh, trh)
       """
     )
   end
+
   if bh.FIXED_LENGTH_TRACE_FLAG > 0
     if !allequal(trh.SAMPLES_IN_TRACE)
       push!(issues, """
@@ -83,6 +95,7 @@ function reportissues(th, bh, eh, trh)
       )
     end
   end
+
   if bh.FIXED_LENGTH_TRACE_FLAG ∉ (0, 1)
     push!(issues, """
       - Detected FIXED_LENGTH_TRACE_FLAG=$(bh.FIXED_LENGTH_TRACE_FLAG) in binary header.
