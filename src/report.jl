@@ -68,7 +68,7 @@ function reportissues(th, bh, eh, trh)
 
   if any(iszero, trh.SAMPLES_IN_TRACE)
     push!(issues, """
-      - Detected trace headers with SAMPLES_IN_TRACE=0.
+      - Detected trace headers with SAMPLES_IN_TRACE = 0.
         The value SAMPLES_PER_TRACE from the binary header
         should be copied to all trace headers.
       """
@@ -98,7 +98,7 @@ function reportissues(th, bh, eh, trh)
 
   if bh.FIXED_LENGTH_TRACE_FLAG ∉ (0, 1)
     push!(issues, """
-      - Detected FIXED_LENGTH_TRACE_FLAG=$(bh.FIXED_LENGTH_TRACE_FLAG) in binary header.
+      - Detected FIXED_LENGTH_TRACE_FLAG = $(bh.FIXED_LENGTH_TRACE_FLAG) in binary header.
         The value should be either 0 (variable-length traces)
         or 1 (fixed length traces).
       """
