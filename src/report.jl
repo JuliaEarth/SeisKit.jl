@@ -63,10 +63,10 @@ function reportissues(th, bh, eh, trh)
       """
     )
   end
-  if isone(bh.FIXED_LENGTH_TRACE_FLAG)
+  if bh.FIXED_LENGTH_TRACE_FLAG > 0
     if !allequal(trh.SAMPLES_IN_TRACE)
       push!(issues, """
-        - Detected FIXED_LENGTH_TRACE_FLAG=1 in binary header
+        - Detected FIXED_LENGTH_TRACE_FLAG > 0 in binary header
           with varying SAMPLES_IN_TRACE in trace headers.
           The flag should be set to 0 to indicate variable
           length traces.
@@ -74,7 +74,7 @@ function reportissues(th, bh, eh, trh)
       )
     elseif !all(==(bh.SAMPLES_PER_TRACE), trh.SAMPLES_IN_TRACE)
       push!(issues, """
-        - Detected FIXED_LENGTH_TRACE_FLAG=1 in binary header
+        - Detected FIXED_LENGTH_TRACE_FLAG > 0 in binary header
           with SAMPLES_IN_TRACE in trace headers different
           from SAMPLES_PER_TRACE in binary header. The value
           SAMPLES_IN_TRACE from trace headers should be copied
@@ -82,6 +82,14 @@ function reportissues(th, bh, eh, trh)
         """
       )
     end
+  end
+  if bh.FIXED_LENGTH_TRACE_FLAG ∉ (0, 1)
+    push!(issues, """
+      - Detected FIXED_LENGTH_TRACE_FLAG=$(bh.FIXED_LENGTH_TRACE_FLAG) in binary header.
+        The value should be either 0 (variable-length traces)
+        or 1 (fixed length traces).
+      """
+    )
   end
 
   println()
