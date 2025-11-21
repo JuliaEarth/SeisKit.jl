@@ -34,7 +34,7 @@ function traces(io, bh, eh, trh)
   # load traces with optimized method
   if ndims == 2
     if allequal(nsamples)
-      fixedtraces2D(io, bh, eh, trh, first(nsamples), ntraces)
+      fixedtraces2D(io, first(nsamples), ntraces)
     else
       throw(ErrorException("Variable-length 2D seismic data loading not yet implemented"))
     end
@@ -43,7 +43,7 @@ function traces(io, bh, eh, trh)
   end
 end
 
-function fixedtraces2D(io, bh, eh, trh, m, n)
+function fixedtraces2D(io, m, n)
   # swap bytes if necessary
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
