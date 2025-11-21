@@ -63,9 +63,9 @@ function traces2Dfixedlength(io, m, n)
     skip(io, TRACE_HEADER_SIZE)
 
     # read trace samples
-    for i in 1:m
+    @inbounds for i in 1:m
       v = swapbytes(read(io, T))
-      @inbounds data[i, j] = convert(F, v)
+      data[i, j] = convert(F, v)
     end
   end
 
