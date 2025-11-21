@@ -42,7 +42,7 @@ function traceheaders(io::IO)
     # build trace header
     header = TraceHeader(fields...)
 
-    # determine actual number of samples in trace
+    # determine number of samples in trace
     SAMPLES_IN_TRACE = header.SAMPLES_IN_TRACE
     if iszero(SAMPLES_IN_TRACE)
       SAMPLES_IN_TRACE = SAMPLES_PER_TRACE
