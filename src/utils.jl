@@ -68,7 +68,7 @@ function numbertype(io::IO)
   # 16: 1-byte, unsigned integer (since revision 2.0)
   seek(io, 3224)
   code = swapbytes(read(io, UInt16))
-  if code == 1
+  type = if code == 1
     IBMFloat32
   elseif code == 2
     Int32
@@ -123,6 +123,26 @@ function numbertype(io::IO)
   else
     error("Unexpected sample format code: $code")
   end
+  NumberType(type)
+end
+
+# wrapped union to avoid type instability
+# given the large number of possible types
+# for SEG-Y trace data
+@wrapped struct NumberType <: WrappedUnion
+  union::Union{
+    Type{IBMFloat32},
+    Type{Int32},
+    Type{Int16},
+    Type{Float32},
+    Type{Float64},
+    Type{Int8},
+    Type{Int64},
+    Type{UInt32},
+    Type{UInt16},
+    Type{UInt64},
+    Type{UInt8}
+  }
 end
 
 # tells the ensemble type used in the SEG-Y file
