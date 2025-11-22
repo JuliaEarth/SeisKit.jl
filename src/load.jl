@@ -56,7 +56,7 @@ function traces2Dfixedlength(io, m, n)
   # load file into RAM if size permits
   buff = filesize(io) < Sys.free_memory() ÷ 2 ? IOBuffer(read(io)) : io
 
-  # load trace data into matrix
+  # convert trace bytes into matrix
   data = Matrix{Float64}(undef, m, n)
   for j in 1:n
     # skip trace header
