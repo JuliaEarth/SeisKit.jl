@@ -96,13 +96,15 @@ function reportissues(th, bh, eh, trh)
     end
   end
 
-  if bh.FIXED_LENGTH_TRACE_FLAG ∉ (0, 1)
-    push!(issues, """
-      - Detected FIXED_LENGTH_TRACE_FLAG = $(bh.FIXED_LENGTH_TRACE_FLAG) in binary header.
-        The value should be either 0 (variable-length traces)
-        or 1 (fixed length traces).
-      """
-    )
+  for field in keys(binaryoptions)
+    value = getfield(bh, field)
+    if value ∉ binaryoptions[field]
+      push!(issues, """
+        - Detected $field = $value in binary header.
+          $field should be $(join(binaryoptions[field], ", ", " or ")).
+        """
+      )
+    end
   end
 
   println()
@@ -119,3 +121,8 @@ function reportissues(th, bh, eh, trh)
     )
   end
 end
+
+# valid options for binary fields
+const binaryoptions = Dict(
+  :FIXED_LENGTH_TRACE_FLAG => (0, 1)
+)
