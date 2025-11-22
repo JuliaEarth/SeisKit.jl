@@ -47,28 +47,25 @@ function traces2Dfixedlength(io, m, n)
   # swap bytes if necessary
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
-  # determine final number type for samples
-  T = numbertype(io)
-  F = T <: IBMFloat32 ? Float64 : T
-
-  # pre-allocate data array with final number type
-  data = Matrix{F}(undef, m, n)
+  # number type for samples
+  NUMBER_TYPE = numbertype(io)
 
   # seek start of trace headers
   seek(io, TEXTUAL_HEADER_SIZE + BINARY_HEADER_SIZE + nextendedheaders(io) * EXTENDED_HEADER_SIZE)
 
-  # load data into RAM if size permits
+  # load file into RAM if size permits
   buff = filesize(io) < Sys.free_memory() ÷ 2 ? IOBuffer(read(io)) : io
 
-  # load trace data
+  # load trace data into matrix
+  data = Matrix{Float64}(undef, m, n)
   for j in 1:n
     # skip trace header
     skip(buff, TRACE_HEADER_SIZE)
 
     # read trace samples
     @inbounds for i in 1:m
-      v = swapbytes(read(buff, T))
-      data[i, j] = convert(F, v)
+      v = swapbytes(read(buff, NUMBER_TYPE))
+      data[i, j] = convert(Float64, v)
     end
   end
 
