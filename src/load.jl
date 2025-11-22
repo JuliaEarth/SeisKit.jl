@@ -57,14 +57,17 @@ function traces2Dfixedlength(io, m, n)
   # seek start of trace headers
   seek(io, TEXTUAL_HEADER_SIZE + BINARY_HEADER_SIZE + nextendedheaders(io) * EXTENDED_HEADER_SIZE)
 
+  # load data into RAM if size permits
+  buff = filesize(io) < Sys.free_memory() ÷ 2 ? IOBuffer(read(io)) : io
+
   # load trace data
   for j in 1:n
     # skip trace header
-    skip(io, TRACE_HEADER_SIZE)
+    skip(buff, TRACE_HEADER_SIZE)
 
     # read trace samples
     @inbounds for i in 1:m
-      v = swapbytes(read(io, T))
+      v = swapbytes(read(buff, T))
       data[i, j] = convert(F, v)
     end
   end
