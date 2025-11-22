@@ -27,9 +27,9 @@ function traces(io, bh, eh, trh)
   nsamples = Int.(replace(trh.SAMPLES_IN_TRACE, 0 => bh.SAMPLES_PER_TRACE))
 
   # determine number of dimensions (2D or 3D seismic)
-  ninlines = length(unique(trh.INLINE_NUMBER))
-  ncrosses = length(unique(trh.CROSSLINE_NUMBER))
-  ndims = ninlines > 1 && ncrosses > 1 ? 3 : 2
+  nilines = length(unique(trh.INLINE_NUMBER))
+  nxlines = length(unique(trh.CROSSLINE_NUMBER))
+  ndims = nilines > 1 && nxlines > 1 ? 3 : 2
 
   # load traces with optimized method
   if ndims == 2
