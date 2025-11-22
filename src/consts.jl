@@ -3,6 +3,6 @@
 # ------------------------------------------------------------------
 
 const TEXTUAL_HEADER_SIZE = 3200
-const BINARY_HEADER_SIZE  = 400
+const BINARY_HEADER_SIZE = 400
 const EXTENDED_HEADER_SIZE = 3200
-const TRACE_HEADER_SIZE   = 240
+const TRACE_HEADER_SIZE = 240
