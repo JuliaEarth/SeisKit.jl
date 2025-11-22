@@ -7,7 +7,6 @@ module Segy
 using StringEncodings
 using StyledStrings
 using PrettyTables
-using WrappedUnions
 using FieldViews
 
 # IBM floating point type
