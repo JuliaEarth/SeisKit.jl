@@ -42,12 +42,14 @@ end
 # tells the number type used for samples in the SEG-Y file
 numbertype(fname::AbstractString) = open(numbertype, fname)
 
-function numbertype(io::IO)
+numbertype(io::IO) = unwrap(_numbertype(io))
+
+function _numbertype(io::IO)
   # swap bytes if necessary
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
   # SEG-Y revision 0.0 uses 4-byte IBM floating point
-  version(io).major == 0 && return IBMFloat32
+  version(io).major == 0 && return NumberType(IBMFloat32)
 
   # SEG-Y revision 1.0 introduced the
   # sample format code at bytes 3225-3226
