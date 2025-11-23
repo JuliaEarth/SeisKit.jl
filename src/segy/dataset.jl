@@ -8,11 +8,11 @@
 A struct to hold SEG-Y dataset information,
 including headers and trace data.
 """
-struct Dataset{TRHVector<:FieldViewable,Data<:Array}
+struct Dataset{TraceHeaderVector<:FieldViewable,Data<:Array}
   textualheader::TextualHeader
   binaryheader::BinaryHeader
-  extendedheaders::Vector{String}
-  traceheaders::TRHVector
+  extendedheaders::Vector{ExtendedHeader}
+  traceheaders::TraceHeaderVector
   data::Data
 end
 

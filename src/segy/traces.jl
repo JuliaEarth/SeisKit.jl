@@ -3,13 +3,12 @@
 # ------------------------------------------------------------------
 
 """
-    traces(io, bh, eh, trh)
+    traces(io, bh, trh)
 
 Load seismic trace data from the IO stream `io`,
-given the binary header `bh`, extended headers `eh`,
-and trace headers `trh`.
+given the binary header `bh` and trace headers `trh`.
 """
-function traces(io, bh, eh, trh)
+function traces(io, bh, trh)
   # determine number of traces
   ntraces = length(trh)
 
