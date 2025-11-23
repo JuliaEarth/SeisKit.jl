@@ -34,8 +34,14 @@ include("segy/consts.jl")
 include("segy/utils.jl")
 include("segy/ioutils.jl")
 
-# main functions
+# headers and traces
 include("segy/headers.jl")
+include("segy/traces.jl")
+
+# SEG-Y datasets
+include("segy/dataset.jl")
+
+# main functions
 include("segy/report.jl")
 include("segy/load.jl")
 include("segy/save.jl")
