@@ -17,6 +17,13 @@ struct Dataset{TraceHeaderVector<:FieldViewable,Data<:Array}
 end
 
 # display SEG-Y dataset in pretty format
-function Base.show(io::IO, dataset::Dataset)
-  show(io, dataset.data)
+function Base.summary(io::IO, dataset::Dataset)
+  print(io, "SEG-Y Dataset")
+end
+
+Base.show(io::IO, dataset::Dataset) = summary(io, dataset)
+
+function Base.show(io::IO, ::MIME"text/plain", dataset::Dataset)
+  summary(io, dataset)
+  # TODO: add more details about the dataset
 end
