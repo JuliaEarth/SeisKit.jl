@@ -112,9 +112,9 @@ trh[1].CROSSLINE_NUMBER # crossline number of the first trace
 
 ### Traces
 
-The actual seismic trace data can be retrieved with the `SeisKit.load`
-function. It calls `SeisKit.headers` and then `SeisKit.traces` to read
-the data efficiently into Julia arrays:
+The actual seismic data can be retrieved with the `SeisKit.load`
+function. It calls `SeisKit.headers` and then `SeisKit.traces`
+to read the data efficiently into Julia arrays:
 
 ```julia
 seismic = SeisKit.load("path/to/file.sgy")
