@@ -36,9 +36,10 @@ Get the latest stable release with Julia's package manager:
 
 ## Usage
 
-We provide high-level functions to report information and highlight
-issues with SEG-Y files. The `SeisKit.report` is usually called first
-in an interactive session to get a quick overview of the file contents:
+We provide the `SeisKit.report` function to report header information
+and highlight issues with SEG-Y files. It can be useful to spot files
+that are not compliant with the standard, and to anticipate potential
+problems when loading the data:
 
 ```julia
 using SeisKit
@@ -46,9 +47,8 @@ using SeisKit
 SeisKit.report("path/to/file.sgy")
 ```
 
-It displays all the available headers, their fields, and highlights
-any issues found in the SEG-Y file. To actually get the headers
-for further processing, we provide specific functions described below.
+To actually get the headers for further processing, we provide specific
+functions described below.
 
 ### Headers
 
@@ -128,7 +128,7 @@ compliant with the rev 2.1 standard:
 SeisKit.save("path/to/new_file.sgy", seismic)
 ```
 
-We do not support saving seismic data sets in older revisions because:
+We do not support saving in older revisions because:
 
 > The SEG Technical Standards Committee strongly
 > encourages producers and users of SEG-Y data sets
