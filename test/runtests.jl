@@ -2,7 +2,7 @@ using SeisKit
 using Test
 
 # list of tests
-testfiles = ["ibmfloat.jl"]
+testfiles = ["segy/ibmfloat.jl"]
 
 @testset "SeisKit.jl" begin
   for testfile in testfiles

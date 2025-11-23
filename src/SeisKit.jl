@@ -4,25 +4,9 @@
 
 module SeisKit
 
-using StringEncodings
-using StyledStrings
-using PrettyTables
-using FieldViews
+# SEG-Y tools
+include("segy.jl")
 
-# IBM floating point type
-include("ibmfloat.jl")
-
-# SEG-Y byte constants
-include("consts.jl")
-
-# utility functions
-include("utils.jl")
-include("ioutils.jl")
-
-# main functions
-include("headers.jl")
-include("report.jl")
-include("load.jl")
-include("save.jl")
+export Segy
 
 end

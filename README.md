@@ -36,7 +36,7 @@ Get the latest stable release with Julia's package manager:
 
 ## Usage
 
-We provide the `SeisKit.report` function to report header information
+We provide the `Segy.report` function to report header information
 and highlight issues with SEG-Y files. It can be useful to spot files
 that are not compliant with the standard, and to anticipate potential
 problems when loading the data:
@@ -44,7 +44,7 @@ problems when loading the data:
 ```julia
 using SeisKit
 
-SeisKit.report("path/to/file.sgy")
+Segy.report("path/to/file.sgy")
 ```
 
 To actually get the headers for further processing, we provide specific
@@ -52,10 +52,10 @@ functions described below.
 
 ### Headers
 
-All headers can be retrieved at once with the `SeisKit.headers` function:
+All headers can be retrieved at once with the `Segy.headers` function:
 
 ```julia
-th, bh, eh, trh = SeisKit.headers("path/to/file.sgy")
+th, bh, eh, trh = Segy.headers("path/to/file.sgy")
 ```
 
 Or individually with dedicated functions:
@@ -63,7 +63,7 @@ Or individually with dedicated functions:
 #### Textual header
 
 ```julia
-th = SeisKit.textualheader("path/to/file.sgy")
+th = Segy.textualheader("path/to/file.sgy")
 ```
 
 The textual header has a `th.content` field with the decoded text,
@@ -74,7 +74,7 @@ the correct format.
 #### Binary header
 
 ```julia
-bh = SeisKit.binaryheader("path/to/file.sgy")
+bh = Segy.binaryheader("path/to/file.sgy")
 ```
 
 The binary header fields can be accessed directly:
@@ -86,7 +86,7 @@ bh.SAMPLE_INTERVAL # sample interval in microseconds
 #### Extended headers
 
 ```julia
-eh = SeisKit.extendedheaders("path/to/file.sgy")
+eh = Segy.extendedheaders("path/to/file.sgy")
 ```
 
 The extended headers are rarely used in practice.
@@ -97,7 +97,7 @@ textual header, but with well-defined formats
 #### Trace headers
 
 ```julia
-trh = SeisKit.traceheaders("path/to/file.sgy")
+trh = Segy.traceheaders("path/to/file.sgy")
 ```
 
 The trace headers are stored in a vector-like data structure
@@ -112,20 +112,20 @@ trh[1].CROSSLINE_NUMBER # crossline number of the first trace
 
 ### Traces
 
-The actual seismic data can be retrieved with the `SeisKit.load`
-function. It calls `SeisKit.headers` and then `SeisKit.traces`
+The actual seismic data can be retrieved with the `Segy.load`
+function. It calls `Segy.headers` and then `Segy.traces`
 to read the data efficiently into Julia arrays:
 
 ```julia
-seismic = SeisKit.load("path/to/file.sgy")
+seismic = Segy.load("path/to/file.sgy")
 ```
 
-The array is stored in the `seismic.data` field. The `SeisKit.save`
+The array is stored in the `seismic.data` field. The `Segy.save`
 function can be used to write the data back to a SEG-Y file that is
 compliant with the rev 2.1 standard:
 
 ```julia
-SeisKit.save("path/to/new_file.sgy", seismic)
+Segy.save("path/to/new_file.sgy", seismic)
 ```
 
 We do not support saving in older revisions because:
@@ -135,8 +135,8 @@ We do not support saving in older revisions because:
 > to move to the revised (2.1) standard in an
 > expeditious fashion.
 
-The `SeisKit.save` function will fix any issues found in the headers
-with `SeisKit.fixissues` before writing the new file. Please consult
+The `Segy.save` function will fix any issues found in the headers
+with `Segy.fixissues` before writing the new file. Please consult
 the docstrings of all these functions for more details.
 
 ## Contributing
