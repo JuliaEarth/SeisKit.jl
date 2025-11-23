@@ -82,7 +82,7 @@ eh = SeisKit.extendedheaders("path/to/file.sgy")
 trh = SeisKit.traceheaders("path/to/file.sgy")
 ```
 
-The returned headers are stored in a vector-like data structure
+The trace headers are stored in a vector-like data structure
 that allows easy access to individual fields without unnecessary
 memory copies:
 
