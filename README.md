@@ -34,6 +34,93 @@ Get the latest stable release with Julia's package manager:
 
 ## Usage
 
+We provide high-level functions to report information and highlight
+issues with SEG-Y files. The `SeisKit.report` is usually called first
+in an interactive session to get a quick overview of the file contents:
+
+```julia
+using SeisKit
+
+SeisKit.report("path/to/file.sgy")
+```
+
+It displays all the available headers, their fields, and highlights
+any issues found in the file structure. To actually get the headers
+for further processing, we provide specific functions described below.
+
+### Headers
+
+All headers can be retrieved at once with the `SeisKit.headers` function:
+
+```julia
+th, bh, eh, trh = SeisKit.headers("path/to/file.sgy")
+```
+
+Or individually with dedicated functions:
+
+#### Textual header
+
+```julia
+th = SeisKit.textualheader("path/to/file.sgy")
+```
+
+#### Binary header
+
+```julia
+bh = SeisKit.binaryheader("path/to/file.sgy")
+```
+
+#### Extended headers
+
+```julia
+eh = SeisKit.extendedheaders("path/to/file.sgy")
+```
+
+#### Trace headers
+
+```julia
+trh = SeisKit.traceheaders("path/to/file.sgy")
+```
+
+The returned headers are stored in a vector-like data structure
+that allows easy access to individual fields without unnecessary
+memory copies:
+
+```julia
+trh.ENSEMBLE_X # vector of ensemble x coordinates
+
+trh[1].CROSSLINE_NUMBER # crossline number of the first trace
+```
+
+### Traces
+
+The actual seismic trace data can be retrieved with the `SeisKit.load`
+function. It calls `SeisKit.headers` and then `SeisKit.traces` to read
+the data efficiently into Julia arrays:
+
+```julia
+seismic = SeisKit.load("path/to/file.sgy")
+```
+
+The array is stored in the `seismic.data` field. The `SeisKit.save`
+function can be used to write the data back to a SEG-Y file that is
+compliant with the rev 2.1 standard:
+
+```julia
+SeisKit.save("path/to/new_file.sgy", seismic)
+```
+
+We do not support saving seismic data sets in older revisions because:
+
+> The SEG Technical Standards Committee strongly
+> encourages producers and users of SEG-Y data sets
+> to move to the revised (2.1) standard in an
+> expeditious fashion.
+
+The `SeisKit.save` function will fix any issues found in the headers
+with `SeisKit.fixissues` before writing the new file. Please consult
+the docstrings of all these functions for more details.
+
 ## Contributing
 
 Contributions are very welcome. Please [open an issue](https://github.com/JuliaEarth/SeisKit.jl/issues) if you have questions.
