@@ -12,7 +12,7 @@
 </p>
 
 Fast IO operations with SEG-Y files and other basic utilities for
-seismic data.
+working with seismic data.
 
 Supports all revisions of the SEG-Y standard from 1975 (rev 0) to
 2023 (rev 2.1).
