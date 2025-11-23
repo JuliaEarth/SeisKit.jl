@@ -11,9 +11,11 @@
   </a>
 </p>
 
-Modern tools written in native Julia for fast IO operations with 
-SEG-Y files. The package supports all revisions from the original
-1975 standard (rev 0) to the latest 2023 update (rev 2.1).
+Fast IO operations with SEG-Y files and other basic utilities for
+seismic data.
+
+Supports all revisions of the SEG-Y standard from 1975 (rev 0) to
+2023 (rev 2.1).
 
 The [SEG technical standards](https://library.seg.org/seg-technical-standards) used in the development of this
 package are:
@@ -45,7 +47,7 @@ SeisKit.report("path/to/file.sgy")
 ```
 
 It displays all the available headers, their fields, and highlights
-any issues found in the file structure. To actually get the headers
+any issues found in the SEG-Y file. To actually get the headers
 for further processing, we provide specific functions described below.
 
 ### Headers
@@ -64,10 +66,21 @@ Or individually with dedicated functions:
 th = SeisKit.textualheader("path/to/file.sgy")
 ```
 
+The textual header has a `th.content` field with the decoded text,
+containing all lines C1 to C40. The SEG-Y standard allows both EBCDIC
+and ASCII encodings, and SeisKit.jl automatically detects and decodes
+the correct format.
+
 #### Binary header
 
 ```julia
 bh = SeisKit.binaryheader("path/to/file.sgy")
+```
+
+The binary header fields can be accessed directly:
+
+```julia
+bh.SAMPLE_INTERVAL # sample interval in microseconds
 ```
 
 #### Extended headers
@@ -75,6 +88,11 @@ bh = SeisKit.binaryheader("path/to/file.sgy")
 ```julia
 eh = SeisKit.extendedheaders("path/to/file.sgy")
 ```
+
+The extended headers are rarely used in practice.
+They consist of textual headers similar to the main
+textual header, but with well-defined formats
+(a.k.a. stanzas).
 
 #### Trace headers
 
