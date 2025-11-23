@@ -15,6 +15,15 @@ Modern tools written in native Julia for fast IO operations with
 SEG-Y files. The package supports all revisions from the original
 1975 standard (rev 0) to the latest 2023 update (rev 2.1).
 
+The [SEG technical standards](https://library.seg.org/seg-technical-standards) used in the development of this
+package are:
+
+- [SEG-Y rev 1.0 Data Exchange format, May 2002](https://library.seg.org/pb-assets/technical-standards/seg_y_rev1-1686080991247.pdf)
+
+- [SEG-Y rev 2.0 Data Exchange format, January 2017](https://library.seg.org/pb-assets/technical-standards/seg_y_rev2_0-mar2017-1686080998003.pdf)
+
+- [SEG-Y rev 2.1 Data Exchange format, October 2023](https://library.seg.org/pb-assets/technical-standards/seg_y_rev2_1-oct2023-1701361639333.pdf)
+
 ## Installation
 
 Get the latest stable release with Julia's package manager:
@@ -32,7 +41,7 @@ Contributions are very welcome. Please [open an issue](https://github.com/JuliaE
 ## Previous attempts
 
 Packages with similar functionality were written
-for older versions of the Julia language:
+for older versions of the language:
 
 - [SegyIO.jl](https://github.com/slimgroup/SegyIO.jl)
   provides read/write functions for SEG-Y rev 1 that
