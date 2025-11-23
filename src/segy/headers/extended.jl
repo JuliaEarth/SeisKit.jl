@@ -15,7 +15,7 @@ function extendedheaders(io::IO)
   seek(io, TEXTUAL_HEADER_SIZE + BINARY_HEADER_SIZE)
 
   # decode extended headers
-  headers = String[]
+  headers = ExtendedHeader[]
   for _ in 1:nextendedheaders(io)
     # read extended header bytes
     bytes = read(io, EXTENDED_HEADER_SIZE)
@@ -25,9 +25,28 @@ function extendedheaders(io::IO)
     encoding = first(bytes) == 0x28 ? "ASCII" : "EBCDIC-CP-US"
 
     # decode bytes with identified encoding
-    decode(bytes, encoding)
+    content = decode(bytes, encoding)
+
+    # store extended header
+    push!(headers, ExtendedHeader(content))
   end
 
-  # return extended headers as strings
+  # return extended headers
   headers
-end 
+end
+
+# ------------------
+# HEADER DEFINITION
+# ------------------
+
+"""
+    ExtendnedHeader(content)
+
+SEG-Y extended header with string `content`.
+"""
+struct ExtendedHeader
+  content::String
+end
+
+# display SEG-Y extended header in pretty format
+Base.show(io::IO, header::ExtendedHeader) = print(io, header.content)
