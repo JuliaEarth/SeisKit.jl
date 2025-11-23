@@ -2,7 +2,7 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # ------------------------------------------------------------------
 
-module Segy
+module SeisKit
 
 using StringEncodings
 using StyledStrings

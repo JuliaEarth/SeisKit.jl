@@ -115,8 +115,8 @@ function reportissues(th, bh, eh, trh)
     println(styled"{red,underline:SEG-Y issues report:}\n")
     println(join((styled"{red:$issue}" for issue in issues), "\n"))
     print(styled"""
-      {red:You can fix most of these issues with `Segy.save(...)`
-      after loading the data with `Segy.load(...)`.}
+      {red:You can fix most of these issues with `SeisKit.save(...)`
+      after loading the data with `SeisKit.load(...)`.}
       """
     )
   end

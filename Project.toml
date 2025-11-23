@@ -1,4 +1,4 @@
-name = "Segy"
+name = "SeisKit"
 uuid = "05bd159c-2902-4555-8394-afb6d27f67e8"
 version = "0.1.0"
 authors = ["Júlio Hoffimann <julio.hoffimann@gmail.com> and contributors"]

@@ -1,10 +1,10 @@
-using Segy
+using SeisKit
 using Test
 
 # list of tests
 testfiles = ["ibmfloat.jl"]
 
-@testset "Segy.jl" begin
+@testset "SeisKit.jl" begin
   for testfile in testfiles
     println("Testing $testfile...")
     include(testfile)
