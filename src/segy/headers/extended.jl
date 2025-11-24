@@ -48,5 +48,9 @@ struct ExtendedHeader
   content::String
 end
 
+# write SEG-Y extended header to IO stream
+Base.write(io::IO, header::ExtendedHeader) =
+  write(io, encode(header.content, "ASCII"))
+
 # display SEG-Y extended header in pretty format
 Base.show(io::IO, header::ExtendedHeader) = print(io, header.content)

@@ -114,5 +114,21 @@ function section2(::Type{BinaryHeader})
   fields[endian+1:end]
 end
 
+# write SEG-Y binary header to IO stream
+function Base.write(io::IO, header::BinaryHeader)
+  # write section 1
+  for field in section1(BinaryHeader)
+    write(io, getfield(header, field))
+  end
+
+  # write unassigned section (200 bytes)
+  write(io, zeros(UInt8, 200))
+
+  # write section 2
+  for field in section2(BinaryHeader)
+    write(io, getfield(header, field))
+  end
+end
+
 # display SEG-Y binary header in pretty table format
 Base.show(io::IO, header::BinaryHeader) = prettyheader(io, header, "SEG-Y Binary Header")

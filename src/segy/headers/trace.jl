@@ -162,5 +162,16 @@ struct TraceHeader
   SOURCE_CONSTANT_UNIT::Int16
 end
 
+# write SEG-Y trace header to IO stream
+function Base.write(io::IO, header::TraceHeader)
+  # write all fields
+  for field in fieldnames(TraceHeader)
+    write(io, getfield(header, field))
+  end
+
+  # write unassigned section (bytes 233 to 240)
+  write(io, zeros(UInt8, 8))
+end
+
 # display SEG-Y trace header in pretty table format
 Base.show(io::IO, header::TraceHeader) = prettyheader(io, header, "SEG-Y Trace Header")
