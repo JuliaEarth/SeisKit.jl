@@ -50,7 +50,7 @@ end
 SEG-Y binary header with all `fields` from
 revisions 1.0, 2.0, and 2.1 of the standard.
 """
-struct BinaryHeader
+mutable struct BinaryHeader
   JOB_NUMBER::Int32
   LINE_NUMBER::UInt32
   REEL_NUMBER::UInt32

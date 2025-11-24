@@ -69,7 +69,7 @@ end
 SEG-Y trace header with all `fields` from
 revisions 1.0, 2.0, and 2.1 of the standard.
 """
-struct TraceHeader
+mutable struct TraceHeader
   TRACE_NUMBER_IN_LINE::Int32
   TRACE_NUMBER_IN_FILE::Int32
   ORIGINAL_FIELD_RECORD_NUMBER::Int32
