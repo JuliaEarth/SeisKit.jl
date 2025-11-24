@@ -166,7 +166,7 @@ function Base.read(io::IO, ::Type{TraceHeader})
   # skip unassigned section (bytes 233 to 240)
   skip(io, 8)
 
-  # return trace header
+  # build trace header
   TraceHeader(fields...)
 end
 
