@@ -30,17 +30,11 @@ function traceheaders(io::IO)
   # read all trace headers
   headers = TraceHeader[]
   while !eof(io)
-    # read fields of trace header
-    fields = map(fieldnames(TraceHeader)) do field
-      type = fieldtype(TraceHeader, field)
-      swapbytes(read(io, type))
-    end
+    # read trace header
+    header = read(io, TraceHeader)
 
-    # skip unassigned section (bytes 233 to 240)
-    skip(io, 8)
-
-    # build trace header
-    header = TraceHeader(fields...)
+    # swap bytes of header if necessary
+    swap!(header, swapbytes)
 
     # determine number of samples in trace
     SAMPLES_IN_TRACE = header.SAMPLES_IN_TRACE
@@ -162,15 +156,37 @@ mutable struct TraceHeader
   SOURCE_CONSTANT_UNIT::Int16
 end
 
+# read SEG-Y trace header from IO stream
+function Base.read(io::IO, ::Type{TraceHeader})
+  # read fields of trace header
+  fields = map(fieldnames(TraceHeader)) do field
+    read(io, fieldtype(TraceHeader, field))
+  end
+
+  # skip unassigned section (bytes 233 to 240)
+  skip(io, 8)
+
+  # return trace header
+  TraceHeader(fields...)
+end
+
 # write SEG-Y trace header to IO stream
 function Base.write(io::IO, header::TraceHeader)
-  # write all fields
+  # write fields of trace header
   for field in fieldnames(TraceHeader)
     write(io, getfield(header, field))
   end
 
   # write unassigned section (bytes 233 to 240)
   write(io, zeros(UInt8, 8))
+end
+
+# swap bytes of SEG-Y trace header
+function swap!(header::TraceHeader, swapbytes)
+  for field in fieldnames(TraceHeader)
+    value = getfield(header, field)
+    setfield!(header, field, swapbytes(value))
+  end
 end
 
 # display SEG-Y trace header in pretty table format
