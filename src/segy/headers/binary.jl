@@ -36,6 +36,9 @@ function binaryheader(io::IO)
     swapbytes(read(io, type))
   end
 
+  # skip unassigned section (bytes 3533 to 3600)
+  skip(io, 68)
+
   # build binary header
   BinaryHeader(fields1..., fields2...)
 end
@@ -128,6 +131,9 @@ function Base.write(io::IO, header::BinaryHeader)
   for field in section2(BinaryHeader)
     write(io, getfield(header, field))
   end
+
+  # write unassigned section (bytes 3533 to 3600)
+  write(io, zeros(UInt8, 68))
 end
 
 # display SEG-Y binary header in pretty table format
