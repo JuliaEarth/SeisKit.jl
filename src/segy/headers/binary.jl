@@ -21,23 +21,14 @@ function binaryheader(io::IO)
   # seek start of binary header
   seek(io, TEXTUAL_HEADER_SIZE)
 
-  # read section 1 (bytes 3201 to 3300)
-  fields1 = map(section1(BinaryHeader)) do field
-    type = fieldtype(BinaryHeader, field)
-    swapbytes(read(io, type))
-  end
+  # read binary header
+  header = read(io, BinaryHeader)
 
-  # skip unassigned section (bytes 3301 to 3500)
-  skip(io, 200)
+  # swap bytes of header if necessary
+  swap!(header, swapbytes)
 
-  # read section 2 (bytes 3501 to 3532)
-  fields2 = map(section2(BinaryHeader)) do field
-    type = fieldtype(BinaryHeader, field)
-    swapbytes(read(io, type))
-  end
-
-  # build binary header
-  BinaryHeader(fields1..., fields2...)
+  # return binary header
+  header
 end
 
 # ------------------
@@ -114,9 +105,28 @@ function section2(::Type{BinaryHeader})
   fields[endian+1:end]
 end
 
+# read SEG-Y binary header from IO stream
+function Base.read(io::IO, ::Type{BinaryHeader})
+  # read section 1 (bytes 3201 to 3300)
+  fields1 = map(section1(BinaryHeader)) do field
+    read(io, fieldtype(BinaryHeader, field))
+  end
+
+  # skip unassigned section (bytes 3301 to 3500)
+  skip(io, 200)
+
+  # read section 2 (bytes 3501 to 3532)
+  fields2 = map(section2(BinaryHeader)) do field
+    read(io, fieldtype(BinaryHeader, field))
+  end
+
+  # build binary header
+  BinaryHeader(fields1..., fields2...)
+end
+
 # write SEG-Y binary header to IO stream
 function Base.write(io::IO, header::BinaryHeader)
-  # write section 1
+  # write section 1 (bytes 3201 to 3300)
   for field in section1(BinaryHeader)
     write(io, getfield(header, field))
   end
@@ -124,9 +134,17 @@ function Base.write(io::IO, header::BinaryHeader)
   # write unassigned section (200 bytes)
   write(io, zeros(UInt8, 200))
 
-  # write section 2
+  # write section 2 (bytes 3501 to 3532)
   for field in section2(BinaryHeader)
     write(io, getfield(header, field))
+  end
+end
+
+# swap bytes of SEG-Y binary header
+function swap!(header::BinaryHeader, swapbytes)
+  for field in fieldnames(BinaryHeader)
+    value = getfield(header, field)
+    setfield!(header, field, swapbytes(value))
   end
 end
 
