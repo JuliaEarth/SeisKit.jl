@@ -566,7 +566,7 @@ SEG-Y Dataset
 └─ Max length: 351
 ```
 
-The array is stored in the `seismic.data` field. The `Segy.save`
+The arrays are stored in the `seismic.traces` field. The `Segy.save`
 function can be used to write the data back to a SEG-Y file that is
 compliant with the rev 2.1 standard:
 
@@ -581,9 +581,18 @@ We do not support saving in older revisions because:
 > to move to the revised (2.1) standard in an
 > expeditious fashion.
 
-The `Segy.save` function will fix any issues found in the headers
-with `Segy.fixissues` before writing the new file. Please consult
-the docstrings of all these functions for more details.
+### Tips
+
+The `Segy.save` function will fix most issues found in the headers
+with `Segy.fixissues` and will update these headers to the latest
+revision with `Segy.updaterev` before writing the new file.
+
+If `Segy.report` shows issues that you want to fix manually,
+you can modify the `Segy.headers`, create a `Segy.Dataset`
+with the modified headers and traces, and then save it with
+`Segy.save`.
+
+Please consult the docstrings of all these functions for more details.
 
 ## Contributing
 
