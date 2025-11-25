@@ -42,12 +42,14 @@ end
 # tells the number type used for samples in the SEG-Y file
 numbertype(fname::AbstractString) = open(numbertype, fname)
 
-function numbertype(io::IO)
+numbertype(io::IO) = unwrap(_numbertype(io))
+
+function _numbertype(io::IO)
   # swap bytes if necessary
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
   # SEG-Y revision 0.0 uses 4-byte IBM floating point
-  version(io).major == 0 && return IBMFloat32
+  version(io).major == 0 && return NumberType(IBMFloat32)
 
   # SEG-Y revision 1.0 introduced the
   # sample format code at bytes 3225-3226
@@ -68,15 +70,50 @@ function numbertype(io::IO)
   # 16: 1-byte, unsigned integer (since revision 2.0)
   seek(io, 3224)
   code = swapbytes(read(io, UInt16))
-  if code == 1
+  type = if code == 1
     IBMFloat32
+  elseif code == 2
+    Int32
+  elseif code == 3
+    Int16
   elseif code == 5
     Float32
   elseif code == 6
     Float64
+  elseif code == 8
+    Int8
+  elseif code == 9
+    Int64
+  elseif code == 10
+    UInt32
+  elseif code == 11
+    UInt16
+  elseif code == 12
+    UInt64
+  elseif code == 16
+    UInt8
   else
     error("Unsupported SEG-Y sample format code: $code")
   end
+  NumberType(type)
+end
+
+# wrapped union to avoid performance issues
+# with large number of types at runtime
+@wrapped struct NumberType <: WrappedUnion
+  union::Union{
+    Type{IBMFloat32},
+    Type{Int32},
+    Type{Int16},
+    Type{Float32},
+    Type{Float64},
+    Type{Int8},
+    Type{Int64},
+    Type{UInt32},
+    Type{UInt16},
+    Type{UInt64},
+    Type{UInt8}
+  }
 end
 
 # tells the ensemble type used in the SEG-Y file
