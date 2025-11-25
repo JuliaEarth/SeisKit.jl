@@ -45,21 +45,6 @@ The `SeisKit` module exports the `Segy` submodule to work with SEG-Y files:
 ```julia
 julia> using SeisKit
 ```
-```julia
-help?> Segy
-```
-```
-The Segy module provides tools to load and save SEG-Y files as well as utilities to report and fix common issues found in SEG-Y headers.
-
-  The main functions defined in this module are:
-
-    •  Segy.report: reports common issues found in SEG-Y headers.
-    •  Segy.headers: retrieves textual, binary, extended and trace headers.
-    •  Segy.load: loads SEG-Y files into Julia arrays effieciently.
-    •  Segy.save: saves seismic structs into SEG-Y files compliant with rev 2.1.
-
-  Additional functions are provided to fix common issues found in SEG-Y headers (Segy.fixissues), read trace headers only (Segy.traceheaders), and more.
-```
 
 ### Retrieving SEG-Y headers
 
