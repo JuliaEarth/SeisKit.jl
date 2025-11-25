@@ -8,7 +8,7 @@ visualtests = !isCI || (isCI && islinux)
 datadir = joinpath(@__DIR__, "data")
 
 # list of tests
-testfiles = ["segy/ibmfloat.jl", "segy/load.jl"]
+testfiles = ["segy/ibmfloat.jl", "segy/load.jl", "segy/save.jl"]
 
 @testset "SeisKit.jl" begin
   for testfile in testfiles
