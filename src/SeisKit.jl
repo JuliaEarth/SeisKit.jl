@@ -7,6 +7,9 @@ module SeisKit
 # SEG-Y tools
 include("segy.jl")
 
+# precompile tools
+include("precompile.jl")
+
 export Segy
 
 end
