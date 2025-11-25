@@ -557,7 +557,7 @@ function. It calls `Segy.headers` and then `Segy.traces`
 to read the data efficiently into Julia arrays:
 
 ```julia
-julia> dataset = Segy.load("test/data/stacked2Drev1.sgy")
+julia> seismic = Segy.load("test/data/stacked2Drev1.sgy")
 ```
 ```
 SEG-Y Dataset
