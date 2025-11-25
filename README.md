@@ -560,10 +560,11 @@ to read the data efficiently into Julia arrays:
 julia> seismic = Segy.load("test/data/stacked2Drev1.sgy")
 ```
 ```
-SEG-Y Dataset
+SEG-Y Dataset (rev 1.0)
 ├─ Nᵒ traces: 7701
-├─ Min length: 351
-└─ Max length: 351
+├─ Nᵒ samples: 351 (fixed)
+├─ Inlines: 0 (fixed)
+└─ X-lines: 7200 ─ 7500
 ```
 
 The arrays are stored in the `seismic.traces` field. The `Segy.save`
