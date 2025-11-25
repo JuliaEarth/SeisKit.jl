@@ -24,6 +24,11 @@ end
 Base.show(io::IO, dataset::Dataset) = summary(io, dataset)
 
 function Base.show(io::IO, ::MIME"text/plain", dataset::Dataset)
+  ntraces = length(dataset.traces)
+  minlen, maxlen = extrema(length.(dataset.traces))
   summary(io, dataset)
-  # TODO: add more details about the dataset
+  println(io)
+  println(io, "  Nᵒ traces: ", length(dataset.traces))
+  println(io, "  Min length: ", minlen)
+  print(io, "  Max length: ", maxlen)
 end
