@@ -93,7 +93,17 @@ function _numbertype(io::IO)
   elseif code == 16
     UInt8
   else
-    error("Unsupported SEG-Y sample format code: $code")
+    error("""
+      Unsupported SEG-Y sample format code: $code
+
+      If you need support for fixed-point numbers
+      or 3-byte integers, please open an issue.
+
+      The Julia packages FixedPointNumbers.jl and
+      BitIntegers.jl could be added as dependencies
+      to implement this support.
+      """
+    )
   end
   NumberType(type)
 end
