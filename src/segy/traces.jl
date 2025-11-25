@@ -16,23 +16,30 @@ function traces(io, bh, trh)
   nsamples = Int.(replace(trh.SAMPLES_IN_TRACE, 0 => bh.SAMPLES_PER_TRACE))
 
   # determine number of dimensions (2D or 3D seismic)
-  nilines = length(unique(trh.INLINE_NUMBER))
-  nxlines = length(unique(trh.CROSSLINE_NUMBER))
+  ilines = trh.INLINE_NUMBER
+  xlines = trh.CROSSLINE_NUMBER
+  nilines = length(unique(ilines))
+  nxlines = length(unique(xlines))
   ndims = nilines > 1 && nxlines > 1 ? 3 : 2
 
+  # determine if all traces have the same number of samples
+  fixedlength = allequal(nsamples)
+
   # load traces with optimized method
-  if ndims == 2
-    if allequal(nsamples)
-      traces2Dfixedlength(io, first(nsamples), ntraces)
+  if fixedlength
+    if ndims == 2
+      # return 2D matrix of size nsamples[1] x ntraces
+      tracesfixedlength2D(io, first(nsamples), ntraces)
     else
-      throw(ErrorException("Variable-length 2D seismic data loading not yet implemented"))
+      # return 3D array of size nsamples[1] x nilines x nxlines
+      throw(ErrorException("3D seismic not yet implemented"))
     end
   else
-    throw(ErrorException("3D seismic data loading not yet implemented"))
+    throw(ErrorException("variable-length traces not yet implemented"))
   end
 end
 
-function traces2Dfixedlength(io, m, n)
+function tracesfixedlength2D(io, m, n)
   # swap bytes if necessary
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
