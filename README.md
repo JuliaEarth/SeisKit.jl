@@ -26,6 +26,8 @@ package are:
 
 - [SEG-Y rev 2.1 Data Exchange format, October 2023](https://library.seg.org/pb-assets/technical-standards/seg_y_rev2_1-oct2023-1701361639333.pdf)
 
+Free registration may be required to access these documents.
+
 ## Installation
 
 Get the latest stable release with Julia's package manager:
