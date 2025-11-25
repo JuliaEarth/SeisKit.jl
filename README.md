@@ -1,7 +1,7 @@
 <p align="center">
   <img src="docs/logo.webp" height="200"><br>
   <a href="https://github.com/JuliaEarth/SeisKit.jl/actions">
-    <img src="https://img.shields.io/github/actions/workflow/status/JuliaEarth/SeisKit.jl/CI.yml?branch=master&style=flat-square">
+    <img src="https://img.shields.io/github/actions/workflow/status/JuliaEarth/SeisKit.jl/CI.yml?branch=main&style=flat-square">
   </a>
   <a href="https://codecov.io/gh/JuliaEarth/SeisKit.jl">
     <img src="https://img.shields.io/codecov/c/github/JuliaEarth/SeisKit.jl?style=flat-square">
