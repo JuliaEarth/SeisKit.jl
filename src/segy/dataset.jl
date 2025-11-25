@@ -3,17 +3,17 @@
 # ------------------------------------------------------------------
 
 """
-    Segy.Dataset(th, bh, eh, trh, data)
+    Segy.Dataset(th, bh, eh, trh, traces)
 
 A struct to hold SEG-Y dataset information,
-including headers and trace data.
+including headers and traces.
 """
-struct Dataset{TraceHeaderVector<:FieldViewable,Data<:Array}
+struct Dataset{TraceHeaderVector<:FieldViewable}
   textualheader::TextualHeader
   binaryheader::BinaryHeader
   extendedheaders::Vector{ExtendedHeader}
   traceheaders::TraceHeaderVector
-  data::Data
+  traces::Vector{Vector{Float64}}
 end
 
 # display SEG-Y dataset in pretty format

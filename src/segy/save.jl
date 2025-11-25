@@ -20,7 +20,7 @@ function save(io::IO, dataset::Dataset)
   bhₒ = dataset.binaryheader
   ehₒ = dataset.extendedheaders
   trhₒ = dataset.traceheaders
-  data = dataset.data
+  trd = dataset.traces
 
   # fix issues with headers
   th₁, bh₁, eh₁, trh₁ = fixissues(thₒ, bhₒ, ehₒ, trhₒ)
@@ -38,7 +38,7 @@ function save(io::IO, dataset::Dataset)
   foreach(h -> write(io, h), eh₂)
 
   # write trace headers and data
-  for (h, t) in zip(trh₂, eachcol(data))
+  for (h, t) in zip(trh₂, trd)
     write(io, h)
     write(io, t)
   end
