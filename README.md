@@ -557,7 +557,13 @@ function. It calls `Segy.headers` and then `Segy.traces`
 to read the data efficiently into Julia arrays:
 
 ```julia
-julia> seismic = Segy.load("test/data/stacked2Drev1.sgy")
+julia> dataset = Segy.load("test/data/stacked2Drev1.sgy")
+```
+```
+SEG-Y Dataset
+├─ Nᵒ traces: 7701
+├─ Min length: 351
+└─ Max length: 351
 ```
 
 The array is stored in the `seismic.data` field. The `Segy.save`
