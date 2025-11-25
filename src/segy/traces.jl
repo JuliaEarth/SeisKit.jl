@@ -3,23 +3,26 @@
 # ------------------------------------------------------------------
 
 """
-    traces(io, bh, trh)
+    traces(io, trh)
 
 Load seismic trace data from the IO stream `io`,
-given the binary header `bh` and trace headers `trh`.
+using information in the trace headers `trh`.
 """
-function traces(io, bh, trh)
+function traces(io, trh)
   # swap bytes if necessary
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
   # number type for samples
   NUMBER_TYPE = numbertype(io)
 
+  # samples per trace (from binary header)
+  SAMPLES_PER_TRACE = samplespertrace(io)
+
   # number of traces
   ntraces = length(trh)
 
   # number of samples in each trace
-  nsamples = Int.(replace(trh.SAMPLES_IN_TRACE, 0 => bh.SAMPLES_PER_TRACE))
+  nsamples = Int.(replace(trh.SAMPLES_IN_TRACE, 0 => SAMPLES_PER_TRACE))
 
   # seek start of trace headers
   seek(io, TEXTUAL_HEADER_SIZE + BINARY_HEADER_SIZE + nextendedheaders(io) * EXTENDED_HEADER_SIZE)

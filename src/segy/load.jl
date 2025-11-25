@@ -16,6 +16,5 @@ Load SEG-Y data from the IO stream `io`.
 """
 function load(io::IO)
   th, bh, eh, trh = headers(io)
-  trd = traces(io, bh, trh)
-  Dataset(th, bh, eh, trh, trd)
+  Dataset(th, bh, eh, trh, traces(io, trh))
 end
