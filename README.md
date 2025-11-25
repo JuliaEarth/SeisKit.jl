@@ -36,147 +36,40 @@ Get the latest stable release with Julia's package manager:
 
 ## Usage
 
-### Report
+The SEG-Y file format is the most widely used format for storing
+seismic data in the industry. It consists of a textual header,
+a binary header, optional extended headers, and trace data with individual trace headers.
 
-We provide the `Segy.report` function to report header information
-and highlight issues with SEG-Y files. It can be useful to spot files
-that are not compliant with the standard, and to anticipate potential
-problems when loading the data:
+The `SeisKit` module exports the `Segy` submodule to work with SEG-Y files:
 
 ```julia
 julia> using SeisKit
-
-julia> Segy.report("test/data/stacked2Drev1.sgy")
 ```
-<details>
-<summary>Click to expand output</summary>
-<pre>
-C 1 CLIENT                        COMPANY                       CREW NO         C 2 LINE            AREA                        MAP ID                          C 3 REEL NO           DAY-START OF REEL     YEAR      OBSERVER                  C 4 INSTRUMENT: MFG            MODEL            SERIAL NO                       C 5 DATA TRACES/RECORD        AUXILIARY TRACES/RECORD         CDF FOLD          C 6 SAMPLE INTERVAL         SAMPLES/TRACE       BITS/IN     BYTES/SAMPPLE       C 7 RECORDING FORMAT        FORMAT THIS REEL        MEASUREMENT SYSTEM          C 8 SAMPLE CODE: FLOATING PT     FIXED PT     FIXED PT-GAIN     CORRELATED      C 9 GAIN  TYPE: FIXED     BINSRY     FLOATING POINT     OTHER                   
-C10 FILTERS: ALIAS     HZ  NOTCH     HZ BAND      -     HZ  SLOPE    -    DB/OCT
-C11 SOURCE: TYPE            NUMBER/POINT        POINT INTERVAL                  
-C12     PATTERN:                           LENGTH        WIDTH                  
-C13 SWEEP: START     HZ END      HZ  LENGTH      MS  CHANNEL NO     TYPE        
-C14 TAPER: START LENGTH       MS END LENGTH        MS TYPE                      
-C15 SPREAD: OFFSET        MAX DISTANCE        GROUP INTERVAL                    
-C16 GEOPHONES: PER GROUP     SPACING     FREQUENCY     MFG          MODEL       
-C17     PATTERN:                           LENGTH        WIDTH                  
-C18 TRACESSORTED BY: RECORD      CDP     OTHER                                  
-C19 AMPLITUDE RECOVRY: NONE       SPHERICAL DIV       AGC    OTHER              
-C20 MAP PROJECTION                      ZONE ID       COORDINATE UNITS          
-C21 PROCESSING:                                                                 
-C22 PROCESSING:                                                                 
-C23                                                                             
-C24                                                                             
-C25                                                                             
-C26                                                                             
-C27                                                                             
-C28                                                                             
-C29                                                                             
-C30                                                                             
-C31                                                                             
-C32                                                                             
-C33                                                                             
-C34                                                                             
-C35                                                                             
-C36                                                                             
-C37                                                                             
-C38                                                                             
-C39 SEG Y REV1                                                                  
-C40 END TEXTUAL HEADER                                                          
+```julia
+help?> Segy
+```
+```julia
+The Segy module provides tools to load and save SEG-Y files as well as utilities to report and fix common issues found in SEG-Y headers.
 
-              SEG-Y Binary Header
-┌─────────────────────────────────────┬───────┐
-│ field                               │ value │
-│ Symbol                              │ Real  │
-├─────────────────────────────────────┼───────┤
-│ JOB_NUMBER                          │ 0     │
-│ LINE_NUMBER                         │ 0     │
-│ REEL_NUMBER                         │ 0     │
-│ TRACES_PER_ENSEMBLE                 │ 1     │
-│ AUX_TRACES_PER_ENSEMBLE             │ 1     │
-│ SAMPLE_INTERVAL                     │ 10000 │
-│ ORIGINAL_SAMPLE_INTERVAL            │ 0     │
-│ SAMPLES_PER_TRACE                   │ 351   │
-│ ORIGINAL_SAMPLES_PER_TRACE          │ 351   │
-│ SAMPLE_FORMAT_CODE                  │ 1     │
-│ ENSEMBLE_FOLD                       │ 1     │
-│ TRACE_SORTING_CODE                  │ 4     │
-│ VERTICAL_SUM_CODE                   │ 0     │
-│ SWEEP_FREQ_START                    │ 0     │
-│ SWEEP_FREQ_END                      │ 0     │
-│ SWEEP_LENGTH                        │ 0     │
-│ SWEEP_TYPE                          │ 4     │
-│ TRACE_NUMBER_OF_SWEEP_CHANNEL       │ 0     │
-│ SWEEP_TRACE_TAPER_LENGTH_START      │ 0     │
-│ SWEEP_TRACE_TAPER_LENGTH_END        │ 0     │
-│ TAPER_TYPE                          │ 3     │
-│ CORRELATED_TRACES                   │ 1     │
-│ BINARY_GAIN_RECOVERED               │ 2     │
-│ AMPLITUDE_RECOVERY_METHOD           │ 4     │
-│ MEASUREMENT_SYSTEM                  │ 1     │
-│ IMPULSE_SIGNAL_POLARITY             │ 0     │
-│ VIBRATORY_POLARITY_CODE             │ 0     │
-│ EXTENDED_TRACES_PER_ENSEMBLE        │ 0     │
-│ EXTENDED_AUX_TRACES_PER_ENSEMBLE    │ 0     │
-│ EXTENDED_SAMPLES_PER_TRACE          │ 0     │
-│ EXTENDED_SAMPLE_INTERVAL            │ 0.0   │
-│ EXTENDED_ORIGINAL_SAMPLE_INTERVAL   │ 0.0   │
-│ EXTENDED_ORIGINAL_SAMPLES_PER_TRACE │ 0     │
-│ EXTENDED_ENSEMBLE_FOLD              │ 0     │
-│ ENDIAN_CONSTANT                     │ 0     │
-│ MAJOR_REVISION_NUMBER               │ 1     │
-│ MINOR_REVISION_NUMBER               │ 0     │
-│ FIXED_LENGTH_TRACE_FLAG             │ 256   │
-│ EXTENDED_TEXT_HEADER_COUNT          │ 0     │
-│ MAX_EXTENDED_TRACE_HEADERS          │ 0     │
-│ SURVEY_TYPE                         │ 0     │
-│ TIME_BASIS_CODE                     │ 0     │
-│ TRACES_IN_FILE                      │ 0     │
-│ FIRST_TRACE_OFFSET                  │ 0     │
-│ TRAILER_RECORDS                     │ 0     │
-└─────────────────────────────────────┴───────┘
+  The main functions defined in this module are:
 
-SEG-Y Trace Header Summary (non-zero fields only)
-┌──────────────────────┬───────────┬───────────┐
-│ field                │ minimum   │ maximum   │
-│ Symbol               │ Int64     │ Int64     │
-├──────────────────────┼───────────┼───────────┤
-│ TRACE_NUMBER_IN_LINE │ 1         │ 7701      │
-│ TRACE_ID_CODE        │ 1         │ 1         │
-│ DATA_USE             │ 1         │ 1         │
-│ ELEVATION_SCALAR     │ 1         │ 1         │
-│ COORDINATE_SCALAR    │ -100      │ -100      │
-│ COORDINATE_UNIT      │ 1         │ 1         │
-│ SAMPLES_IN_TRACE     │ 351       │ 351       │
-│ SAMPLE_INTERVAL      │ 10000     │ 10000     │
-│ ENSEMBLE_X           │ 46604756  │ 47357660  │
-│ ENSEMBLE_Y           │ 719430976 │ 719775424 │
-│ CROSSLINE_NUMBER     │ 7200      │ 7500      │
-│ SHOTPOINT_NUMBER     │ 2400      │ 2500      │
-└──────────────────────┴───────────┴───────────┘
+    •  Segy.report: reports common issues found in SEG-Y headers.
+    •  Segy.headers: retrieves textual, binary, extended and trace headers.
+    •  Segy.load: loads SEG-Y files into Julia arrays effieciently.
+    •  Segy.save: saves seismic structs into SEG-Y files compliant with rev 2.1.
 
-SEG-Y issues report:
+  Additional functions are provided to fix common issues found in SEG-Y headers (Segy.fixissues), read trace headers only (Segy.traceheaders), and more.
+```
 
-- Detected FIXED_LENGTH_TRACE_FLAG = 256 in binary header.
-  FIXED_LENGTH_TRACE_FLAG should be 0 or 1.
+### Retrieving SEG-Y headers
 
-You can fix most of these issues with `Segy.save(...)`
-after loading the data with `Segy.load(...)`.
-</pre>
-</details>
-
-To actually get the headers for further processing, we provide specific
-functions described below.
-
-### Headers
-
-All headers can be retrieved together with the `Segy.headers` function:
+All SEG-Y headers can be retrieved with the `Segy.headers` function:
 
 ```julia
 th, bh, eh, trh = Segy.headers("test/data/stacked2Drev1.sgy")
 ```
 
-or individually with dedicated functions:
+but they can also be retrieved separately:
 
 #### Textual header
 
@@ -550,7 +443,7 @@ julia> trh[1].CROSSLINE_NUMBER # crossline number of the first trace
 7200
 ```
 
-### Traces
+### Retrieving SEG-Y traces
 
 The actual seismic data can be retrieved with the `Segy.load`
 function. It calls `Segy.headers` and then `Segy.traces`
@@ -568,8 +461,8 @@ SEG-Y Dataset (rev 1.0)
 ```
 
 The arrays are stored in the `seismic.traces` field. The `Segy.save`
-function can be used to write the data back to a SEG-Y file that is
-compliant with the rev 2.1 standard:
+function can be used to write the data back to a file that is compliant
+with SEG-Y rev 2.1:
 
 ```julia
 julia> Segy.save("path/to/newfile.sgy", seismic)
@@ -582,16 +475,139 @@ We do not support saving in older revisions because:
 > to move to the revised (2.1) standard in an
 > expeditious fashion.
 
-### Tips
+### Troubleshooting
 
-The `Segy.save` function will fix most issues found in the headers
-with `Segy.fixissues` and will update these headers to the latest
-revision with `Segy.updaterev` before writing the new file.
+We provide the `Segy.report` function to report header information
+and highlight issues with SEG-Y files. It can be useful to spot files
+that are not compliant with the standard, and to anticipate potential
+problems when loading the data:
+
+```julia
+julia> Segy.report("test/data/stacked2Drev1.sgy")
+```
+<details>
+<summary>Click to expand output</summary>
+<pre>
+C 1 CLIENT                        COMPANY                       CREW NO         C 2 LINE            AREA                        MAP ID                          C 3 REEL NO           DAY-START OF REEL     YEAR      OBSERVER                  C 4 INSTRUMENT: MFG            MODEL            SERIAL NO                       C 5 DATA TRACES/RECORD        AUXILIARY TRACES/RECORD         CDF FOLD          C 6 SAMPLE INTERVAL         SAMPLES/TRACE       BITS/IN     BYTES/SAMPPLE       C 7 RECORDING FORMAT        FORMAT THIS REEL        MEASUREMENT SYSTEM          C 8 SAMPLE CODE: FLOATING PT     FIXED PT     FIXED PT-GAIN     CORRELATED      C 9 GAIN  TYPE: FIXED     BINSRY     FLOATING POINT     OTHER                   
+C10 FILTERS: ALIAS     HZ  NOTCH     HZ BAND      -     HZ  SLOPE    -    DB/OCT
+C11 SOURCE: TYPE            NUMBER/POINT        POINT INTERVAL                  
+C12     PATTERN:                           LENGTH        WIDTH                  
+C13 SWEEP: START     HZ END      HZ  LENGTH      MS  CHANNEL NO     TYPE        
+C14 TAPER: START LENGTH       MS END LENGTH        MS TYPE                      
+C15 SPREAD: OFFSET        MAX DISTANCE        GROUP INTERVAL                    
+C16 GEOPHONES: PER GROUP     SPACING     FREQUENCY     MFG          MODEL       
+C17     PATTERN:                           LENGTH        WIDTH                  
+C18 TRACESSORTED BY: RECORD      CDP     OTHER                                  
+C19 AMPLITUDE RECOVRY: NONE       SPHERICAL DIV       AGC    OTHER              
+C20 MAP PROJECTION                      ZONE ID       COORDINATE UNITS          
+C21 PROCESSING:                                                                 
+C22 PROCESSING:                                                                 
+C23                                                                             
+C24                                                                             
+C25                                                                             
+C26                                                                             
+C27                                                                             
+C28                                                                             
+C29                                                                             
+C30                                                                             
+C31                                                                             
+C32                                                                             
+C33                                                                             
+C34                                                                             
+C35                                                                             
+C36                                                                             
+C37                                                                             
+C38                                                                             
+C39 SEG Y REV1                                                                  
+C40 END TEXTUAL HEADER                                                          
+
+              SEG-Y Binary Header
+┌─────────────────────────────────────┬───────┐
+│ field                               │ value │
+│ Symbol                              │ Real  │
+├─────────────────────────────────────┼───────┤
+│ JOB_NUMBER                          │ 0     │
+│ LINE_NUMBER                         │ 0     │
+│ REEL_NUMBER                         │ 0     │
+│ TRACES_PER_ENSEMBLE                 │ 1     │
+│ AUX_TRACES_PER_ENSEMBLE             │ 1     │
+│ SAMPLE_INTERVAL                     │ 10000 │
+│ ORIGINAL_SAMPLE_INTERVAL            │ 0     │
+│ SAMPLES_PER_TRACE                   │ 351   │
+│ ORIGINAL_SAMPLES_PER_TRACE          │ 351   │
+│ SAMPLE_FORMAT_CODE                  │ 1     │
+│ ENSEMBLE_FOLD                       │ 1     │
+│ TRACE_SORTING_CODE                  │ 4     │
+│ VERTICAL_SUM_CODE                   │ 0     │
+│ SWEEP_FREQ_START                    │ 0     │
+│ SWEEP_FREQ_END                      │ 0     │
+│ SWEEP_LENGTH                        │ 0     │
+│ SWEEP_TYPE                          │ 4     │
+│ TRACE_NUMBER_OF_SWEEP_CHANNEL       │ 0     │
+│ SWEEP_TRACE_TAPER_LENGTH_START      │ 0     │
+│ SWEEP_TRACE_TAPER_LENGTH_END        │ 0     │
+│ TAPER_TYPE                          │ 3     │
+│ CORRELATED_TRACES                   │ 1     │
+│ BINARY_GAIN_RECOVERED               │ 2     │
+│ AMPLITUDE_RECOVERY_METHOD           │ 4     │
+│ MEASUREMENT_SYSTEM                  │ 1     │
+│ IMPULSE_SIGNAL_POLARITY             │ 0     │
+│ VIBRATORY_POLARITY_CODE             │ 0     │
+│ EXTENDED_TRACES_PER_ENSEMBLE        │ 0     │
+│ EXTENDED_AUX_TRACES_PER_ENSEMBLE    │ 0     │
+│ EXTENDED_SAMPLES_PER_TRACE          │ 0     │
+│ EXTENDED_SAMPLE_INTERVAL            │ 0.0   │
+│ EXTENDED_ORIGINAL_SAMPLE_INTERVAL   │ 0.0   │
+│ EXTENDED_ORIGINAL_SAMPLES_PER_TRACE │ 0     │
+│ EXTENDED_ENSEMBLE_FOLD              │ 0     │
+│ ENDIAN_CONSTANT                     │ 0     │
+│ MAJOR_REVISION_NUMBER               │ 1     │
+│ MINOR_REVISION_NUMBER               │ 0     │
+│ FIXED_LENGTH_TRACE_FLAG             │ 256   │
+│ EXTENDED_TEXT_HEADER_COUNT          │ 0     │
+│ MAX_EXTENDED_TRACE_HEADERS          │ 0     │
+│ SURVEY_TYPE                         │ 0     │
+│ TIME_BASIS_CODE                     │ 0     │
+│ TRACES_IN_FILE                      │ 0     │
+│ FIRST_TRACE_OFFSET                  │ 0     │
+│ TRAILER_RECORDS                     │ 0     │
+└─────────────────────────────────────┴───────┘
+
+SEG-Y Trace Header Summary (non-zero fields only)
+┌──────────────────────┬───────────┬───────────┐
+│ field                │ minimum   │ maximum   │
+│ Symbol               │ Int64     │ Int64     │
+├──────────────────────┼───────────┼───────────┤
+│ TRACE_NUMBER_IN_LINE │ 1         │ 7701      │
+│ TRACE_ID_CODE        │ 1         │ 1         │
+│ DATA_USE             │ 1         │ 1         │
+│ ELEVATION_SCALAR     │ 1         │ 1         │
+│ COORDINATE_SCALAR    │ -100      │ -100      │
+│ COORDINATE_UNIT      │ 1         │ 1         │
+│ SAMPLES_IN_TRACE     │ 351       │ 351       │
+│ SAMPLE_INTERVAL      │ 10000     │ 10000     │
+│ ENSEMBLE_X           │ 46604756  │ 47357660  │
+│ ENSEMBLE_Y           │ 719430976 │ 719775424 │
+│ CROSSLINE_NUMBER     │ 7200      │ 7500      │
+│ SHOTPOINT_NUMBER     │ 2400      │ 2500      │
+└──────────────────────┴───────────┴───────────┘
+
+SEG-Y issues report:
+
+- Detected FIXED_LENGTH_TRACE_FLAG = 256 in binary header.
+  FIXED_LENGTH_TRACE_FLAG should be 0 or 1.
+
+You can fix most of these issues with `Segy.save(...)`
+after loading the data with `Segy.load(...)`.
+</pre>
+</details>
 
 If `Segy.report` shows issues that you want to fix manually,
 you can modify the `Segy.headers`, create a `Segy.Dataset`
 with the modified headers and traces, and then save it with
-`Segy.save`.
+`Segy.save`. The `Segy.save` function fixes most issues found
+in the headers using the `Segy.fixissues` function before
+writing the new file in SEG-Y rev 2.1.
 
 Please consult the docstrings of all these functions for more details.
 
