@@ -43,9 +43,7 @@ struct TextualHeader
 end
 
 # write SEG-Y textual header to IO stream
-Base.write(io::IO, header::TextualHeader) =
-  write(io, encode(header.content, "ASCII"))
+Base.write(io::IO, header::TextualHeader) = write(io, encode(header.content, "ASCII"))
 
 # display SEG-Y textual header in pretty format
-Base.show(io::IO, header::TextualHeader) =
-  print(io, replace(header.content, r"(C\d+)" => s"\n\1"))
+Base.show(io::IO, header::TextualHeader) = print(io, replace(header.content, r"(C\d+)" => s"\n\1"))
