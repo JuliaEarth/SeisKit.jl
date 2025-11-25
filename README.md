@@ -48,7 +48,7 @@ julia> using SeisKit
 ```julia
 help?> Segy
 ```
-```julia
+```
 The Segy module provides tools to load and save SEG-Y files as well as utilities to report and fix common issues found in SEG-Y headers.
 
   The main functions defined in this module are:
