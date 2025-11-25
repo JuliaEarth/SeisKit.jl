@@ -18,17 +18,28 @@ end
 
 # display SEG-Y dataset in pretty format
 function Base.summary(io::IO, dataset::Dataset)
-  print(io, "SEG-Y Dataset")
+  bh = dataset.binaryheader
+  major = bh.MAJOR_REVISION_NUMBER
+  minor = bh.MINOR_REVISION_NUMBER
+  print(io, "SEG-Y Dataset (rev $major.$minor)")
 end
 
 Base.show(io::IO, dataset::Dataset) = summary(io, dataset)
 
 function Base.show(io::IO, ::MIME"text/plain", dataset::Dataset)
-  ntraces = length(dataset.traces)
-  minlen, maxlen = extrema(length.(dataset.traces))
+  trh = dataset.traceheaders
+  ilines = trh.INLINE_NUMBER
+  xlines = trh.CROSSLINE_NUMBER
+  traces = dataset.traces
+  ntraces = length(traces)
+  tmin, tmax = extrema(length, traces)
+  imin, imax = extrema(ilines)
+  xmin, xmax = extrema(xlines)
+  text(min, max) = min == max ? "$min (fixed)" : "$min ─ $max"
   summary(io, dataset)
   println(io)
-  println(io, "├─ Nᵒ traces: ", length(dataset.traces))
-  println(io, "├─ Min length: ", minlen)
-  print(io,   "└─ Max length: ", maxlen)
+  println(io, "├─ Nᵒ traces: ", ntraces)
+  println(io, "├─ Nᵒ samples: ", text(tmin, tmax))
+  println(io, "├─ Inlines: ", text(imin, imax))
+  print(io,   "└─ X-lines: ", text(xmin, xmax))
 end
