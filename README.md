@@ -14,7 +14,7 @@
 Fast IO operations with SEG-Y files and other basic utilities for
 working with seismic data.
 
-Supports all revisions of the SEG-Y standard from 1975 (rev 0) to
+Supports all revisions of the SEG-Y standard from 2002 (rev 1) to
 2023 (rev 2.1).
 
 The [SEG technical standards](https://library.seg.org/seg-technical-standards) used in the development of this
