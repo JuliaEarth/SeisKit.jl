@@ -14,11 +14,11 @@
 Fast IO operations with SEG-Y files and other basic utilities for
 working with seismic data.
 
-Supports all revisions of the SEG-Y standard from 2002 (rev 1) to
+Supports all revisions of the SEG-Y standard from 1975 (rev 0) to
 2023 (rev 2.1).
 
-The [SEG technical standards](https://library.seg.org/seg-technical-standards) used in the development of this
-package are:
+The [SEG technical standards](https://library.seg.org/seg-technical-standards)
+used in the development of this package are:
 
 - [SEG-Y rev 1.0 Data Exchange format, May 2002](https://library.seg.org/pb-assets/technical-standards/seg_y_rev1-1686080991247.pdf)
 
@@ -40,7 +40,8 @@ Get the latest stable release with Julia's package manager:
 
 The SEG-Y file format is the most widely used format for storing
 seismic data in the industry. It consists of a textual header,
-a binary header, optional extended headers, and trace data with individual trace headers.
+a binary header, optional extended headers, and trace data with
+individual trace headers.
 
 The `SeisKit` module exports the `Segy` submodule to work with SEG-Y files:
 
