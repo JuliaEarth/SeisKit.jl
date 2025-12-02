@@ -17,14 +17,14 @@ working with seismic data.
 Supports all revisions of the SEG-Y standard from 2002 (rev 1) to
 2023 (rev 2.1).
 
-The [SEG technical standards](https://library.seg.org/seg-technical-standards)
+The [SEG technical standards](https://seg.org/publications/seg-technical-standards)
 used in the development of this package are:
 
-- [SEG-Y rev 1.0 Data Exchange format, May 2002](https://library.seg.org/pb-assets/technical-standards/seg_y_rev1-1686080991247.pdf)
+- [SEG-Y rev 1.0 Data Exchange format, May 2002](https://seg.org/wp-content/uploads/2025/11/seg_y_rev1.pdf)
 
-- [SEG-Y rev 2.0 Data Exchange format, January 2017](https://library.seg.org/pb-assets/technical-standards/seg_y_rev2_0-mar2017-1686080998003.pdf)
+- [SEG-Y rev 2.0 Data Exchange format, January 2017](https://seg.org/wp-content/uploads/2025/11/seg_y_rev2_0_mar2017.pdf)
 
-- [SEG-Y rev 2.1 Data Exchange format, October 2023](https://library.seg.org/pb-assets/technical-standards/seg_y_rev2_1-oct2023-1701361639333.pdf)
+- [SEG-Y rev 2.1 Data Exchange format, October 2023](https://seg.org/wp-content/uploads/2025/11/seg_y_rev2_1-oct2023.pdf)
 
 Free registration may be required to access these documents.
 
