@@ -51,6 +51,9 @@ function datum(header::TextualHeader)
   # remove dashes from datum string
   d = replace(datumstring(header), "-" => "")
 
+  # standardize to uppercase
+  d = uppercase(d)
+
   # convert to datum type
   if d == "WGS84"
     WGS84Latest
@@ -74,11 +77,11 @@ function datumstring(header::TextualHeader)
 
   # search for "DATUM: ___" pattern
   m = match(r"\bdatum\b:?\s*(\w+-?\d*)"i, text)
-  isnothing(m) || return first(m.captures)
+  isnothing(m) || return only(m.captures)
 
   # search for "ON ___ DATUM" pattern
   m = match(r"\bon\b\s+(\w+\d*)\s*\bdatum\b"i, text)
-  isnothing(m) || return first(m.captures)
+  isnothing(m) || return only(m.captures)
 
   # return WGS84 as default datum
   "WGS84"
