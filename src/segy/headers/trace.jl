@@ -165,8 +165,9 @@ end
 """
     rawcoords(header::TraceHeader) -> (x, y)
 
-Retrieve raw coordinates `(x, y)` from the trace `header`,
-applying coordinate scalar and unit.
+Retrieve raw coordinates `(x, y)` from the
+SEG-Y trace `header`, applying coordinate
+scalar and unit.
 """
 function rawcoords(header::TraceHeader)
   # retrieve coordinate values

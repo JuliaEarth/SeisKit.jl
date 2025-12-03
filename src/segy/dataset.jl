@@ -19,14 +19,14 @@ end
 """
     datum(dataset::Dataset) -> CoordRefSystems.Datum
 
-Retrieve datum from the textual header of the `dataset`.
+Retrieve datum from the textual header of the SEG-Y `dataset`.
 """
 datum(dataset::Dataset) = datum(dataset.textualheader)
 
 """
     rawcoords(dataset::Dataset) -> Vector{Tuple{Quantity, Quantity}}
 
-Retrieve raw coordinates (x, y) for all traces in the `dataset`.
+Retrieve raw coordinates (x, y) for all traces in the SEG-Y `dataset`.
 """
 rawcoords(dataset::Dataset) = rawcoords.(dataset.traceheaders)
 

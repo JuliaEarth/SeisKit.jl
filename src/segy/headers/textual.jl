@@ -42,6 +42,11 @@ struct TextualHeader
   content::String
 end
 
+"""
+    datum(header::TextualHeader) -> CoordRefSystems.Datum
+
+Retrieve datum from the SEG-Y textual `header`.
+"""
 function datum(header::TextualHeader)
   # remove dashes from datum string
   d = replace(datumstring(header), "-" => "")
@@ -58,6 +63,11 @@ function datum(header::TextualHeader)
   end
 end
 
+"""
+    datumstring(header::TextualHeader) -> String
+
+Retrieve datum string from the SEG-Y textual `header`.
+"""
 function datumstring(header::TextualHeader)
   # retrieve text content
   text = header.content
