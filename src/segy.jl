@@ -24,6 +24,7 @@ using StyledStrings
 using PrettyTables
 using WrappedUnions
 using FieldViews
+using CoordRefSystems
 using Unitful
 
 # IBM floating point type

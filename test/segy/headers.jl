@@ -1,3 +1,8 @@
+@testset "TextualHeader" begin
+  h = Segy.textualheader(joinpath(datadir, "stacked2Drev1.sgy"))
+  @test Segy.datum(h) == WGS84Latest
+end
+
 @testset "TraceHeader" begin
   hs = Segy.traceheaders(joinpath(datadir, "stacked2Drev1.sgy"))
   xs = Segy.rawcoords.(hs)

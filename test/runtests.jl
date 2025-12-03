@@ -1,4 +1,5 @@
 using SeisKit
+using CoordRefSystems
 using Unitful
 using Test
 

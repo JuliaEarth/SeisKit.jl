@@ -42,6 +42,38 @@ struct TextualHeader
   content::String
 end
 
+function datum(header::TextualHeader)
+  # remove dashes from datum string
+  d = replace(datumstring(header), "-" => "")
+
+  # convert to datum type
+  if d == "WGS84"
+    WGS84Latest
+  elseif d == "ED50"
+    ED50
+  elseif d == "SAD69"
+    SAD69
+  else
+    error("Unsupported datum: $d. Please open an issue to request support.")
+  end
+end
+
+function datumstring(header::TextualHeader)
+  # retrieve text content
+  text = header.content
+
+  # search for "DATUM: ___" pattern
+  m = match(r"\bdatum\b:?\s*(\w+-?\d*)"i, text)
+  isnothing(m) || return first(m.captures)
+
+  # search for "ON ___ DATUM" pattern
+  m = match(r"\bon\b\s+(\w+\d*)\s*\bdatum\b"i, text)
+  isnothing(m) || return first(m.captures)
+
+  # return WGS84 as default datum
+  "WGS84"
+end
+
 # write SEG-Y textual header to IO stream
 Base.write(io::IO, header::TextualHeader) = write(io, encode(header.content, "ASCII"))
 

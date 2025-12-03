@@ -17,9 +17,16 @@ struct Dataset{TraceHeaderVector<:FieldViewable}
 end
 
 """
+    datum(dataset::Dataset) -> CoordRefSystems.Datum
+
+Retrieve datum from the textual header of the `dataset`.
+"""
+datum(dataset::Dataset) = datum(dataset.textualheader)
+
+"""
     rawcoords(dataset::Dataset) -> Vector{Tuple{Quantity, Quantity}}
 
-Retrieve raw coordinates (x, y) from all traces in the dataset.
+Retrieve raw coordinates (x, y) for all traces in the `dataset`.
 """
 rawcoords(dataset::Dataset) = rawcoords.(dataset.traceheaders)
 
