@@ -16,6 +16,17 @@ struct Dataset{TraceHeaderVector<:FieldViewable}
   traces::Vector{Vector{Float64}}
 end
 
+"""
+    rawcoords(dataset::Dataset) -> Vector{Tuple{Quantity, Quantity}}
+
+Retrieve raw coordinates (x, y) from all traces in the dataset.
+"""
+rawcoords(dataset::Dataset) = rawcoords.(dataset.traceheaders)
+
+# -----------
+# IO METHODS
+# -----------
+
 # display SEG-Y dataset in pretty format
 function Base.summary(io::IO, dataset::Dataset)
   bh = dataset.binaryheader

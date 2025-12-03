@@ -18,6 +18,9 @@ testfiles = [
   "segy/load.jl",
   "segy/save.jl",
 
+  # dataset tests
+  "segy/dataset.jl",
+
   # utility tests
   "segy/utils.jl"
 ]
