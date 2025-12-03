@@ -24,6 +24,7 @@ using StyledStrings
 using PrettyTables
 using WrappedUnions
 using FieldViews
+using Unitful
 
 # IBM floating point type
 include("segy/ibmfloat.jl")

@@ -162,6 +162,40 @@ mutable struct TraceHeader
   SOURCE_CONSTANT_UNIT::Int16
 end
 
+"""
+    rawcoords(header::TraceHeader) -> (x, y)
+
+Retrieve raw coordinates `(x, y)` from the trace `header`,
+applying coordinate scalar and unit.
+"""
+function rawcoords(header::TraceHeader)
+  # retrieve coordinate values
+  x = float(header.ENSEMBLE_X)
+  y = float(header.ENSEMBLE_Y)
+
+  # apply coordinate scalar
+  s = header.COORDINATE_SCALAR
+  if s > 0
+    x *= s
+    y *= s
+  elseif s < 0
+    x /= -s
+    y /= -s
+  end
+
+  # apply coordinate unit
+  u = header.COORDINATE_UNIT
+  if u == 1
+    (x * u"m", y * u"m")
+  elseif u == 2
+    (x * u"s", y * u"s")
+  elseif u == 3
+    (x * u"°", y * u"°")
+  elseif u == 4
+    error("DMS coordinates not supported")
+  end
+end
+
 # write SEG-Y trace header to IO stream
 function Base.write(io::IO, header::TraceHeader)
   # write fields of trace header
