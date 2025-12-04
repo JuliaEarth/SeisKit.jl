@@ -17,7 +17,34 @@ struct Dataset{TraceHeaderVector<:FieldViewable}
 end
 
 """
-    crs(dataset::Dataset) -> CoordRefSystems.CRS
+    coords(dataset::Dataset) -> Vector{<:CoordRefSystems.CRS}
+
+Retrieve coordinates for all traces in the SEG-Y `dataset`
+"""
+function coords(dataset::Dataset)
+  # retrieve raw coordinates
+  xy = rawcoords(dataset)
+
+  CRS = try # to retrieve CRS from headers
+    crs(dataset)
+  catch # guess CRS from units of raw coordinates
+    u = unit(first(first(xy)))
+    d = datum(dataset)
+    if u == u"m"
+      Cartesian{d}
+    elseif u == u"°"
+      LatLon{d}
+    else
+      error("Cannot infer CRS from coordinate units: $u")
+    end
+  end
+
+  # build coordinates
+  [CRS(x, y) for (x, y) in xy]
+end
+
+"""
+    crs(dataset::Dataset) -> Type{<:CoordRefSystems.CRS}
 
 Retrieve coordinate reference system the of the SEG-Y `dataset`.
 """

@@ -25,8 +25,8 @@ WrappedUnions = "0.3"
 julia = "1.10"
 
 [extras]
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 CoordRefSystems = "b46f11dc-f210-4604-bfba-323c1ec968cb"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [targets]

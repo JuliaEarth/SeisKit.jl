@@ -43,7 +43,7 @@ struct TextualHeader
 end
 
 """
-    crs(header::TextualHeader) -> CoordRefSystems.CRS
+    crs(header::TextualHeader) -> Type{<:CoordRefSystems.CRS}
 
 Retrieve coordinate reference system from the SEG-Y textual `header`.
 """
