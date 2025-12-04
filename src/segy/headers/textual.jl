@@ -43,6 +43,63 @@ struct TextualHeader
 end
 
 """
+    crs(header::TextualHeader) -> CoordRefSystems.CRS
+
+Retrieve coordinate reference system from the SEG-Y textual `header`.
+"""
+function crs(header::TextualHeader)
+  # remove spaces from CRS string
+  c = replace(crsstring(header), " " => "")
+
+  # standardize to uppercase
+  c = uppercase(c)
+
+  # convert to CRS type
+  if startswith(c, "EPSG")
+    # extract EPSG code
+    code = parse(Int, last(split(c, ":")))
+    CoordRefSystems.get(EPSG{code})
+  elseif startswith(c, "UTM")
+    # extract UTM code
+    code = last(split(c, ":"))
+    if endswith(code, "N")
+      zone = parse(Int, chop(code))
+      utmnorth(zone, datum=datum(header))
+    elseif endswith(code, "S")
+      zone = parse(Int, chop(code))
+      utmsouth(zone, datum=datum(header))
+    else # assume southern hemisphere
+      zone = parse(Int, code)
+      utmsouth(zone, datum=datum(header))
+    end
+  elseif c == "UNKNOWN"
+    # return generic CRS
+    CRS
+  end
+end
+
+"""
+    crsstring(header::TextualHeader) -> String
+
+Retrieve coordinate reference system string from the SEG-Y textual `header`.
+"""
+function crsstring(header::TextualHeader)
+  # retrieve text content
+  text = header.content
+
+  # search for "EPSG ___" pattern
+  m = match(r"(\bepsg\b:?\s*\d+)"i, text)
+  isnothing(m) || return only(m.captures)
+
+  # search for "UTM ZONE ___" pattern
+  m = match(r"\(?\butm\b\)?\s*,?\s+\bzone\b:?\s*(id)?\s+(\d+\s*[ns]?)"i, text)
+  isnothing(m) || return "UTM:" * last(m.captures)
+
+  # return UNKNOWN string as default CRS
+  "UNKNOWN"
+end
+
+"""
     datum(header::TextualHeader) -> CoordRefSystems.Datum
 
 Retrieve datum from the SEG-Y textual `header`.
@@ -75,7 +132,7 @@ function datumstring(header::TextualHeader)
   # retrieve text content
   text = header.content
 
-  # search for "DATUM: ___" pattern
+  # search for "DATUM ___" pattern
   m = match(r"\bdatum\b:?\s*(\w+-?\d*)"i, text)
   isnothing(m) || return only(m.captures)
 

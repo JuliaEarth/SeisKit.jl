@@ -17,16 +17,29 @@ struct Dataset{TraceHeaderVector<:FieldViewable}
 end
 
 """
+    crs(dataset::Dataset) -> CoordRefSystems.CRS
+
+Retrieve coordinate reference system the of the SEG-Y `dataset`.
+"""
+function crs(dataset::Dataset)
+  # TODO: prioritize extended headers when available
+  crs(dataset.textualheader)
+end
+
+"""
     datum(dataset::Dataset) -> CoordRefSystems.Datum
 
-Retrieve datum from the textual header of the SEG-Y `dataset`.
+Retrieve datum of the SEG-Y `dataset`.
 """
-datum(dataset::Dataset) = datum(dataset.textualheader)
+function datum(dataset::Dataset)
+  # TODO: prioritize extended headers when available
+  datum(dataset.textualheader)
+end
 
 """
     rawcoords(dataset::Dataset) -> Vector{Tuple{Quantity, Quantity}}
 
-Retrieve raw coordinates (x, y) for all traces in the SEG-Y `dataset`.
+Retrieve raw coordinates for all traces in the SEG-Y `dataset`.
 """
 rawcoords(dataset::Dataset) = rawcoords.(dataset.traceheaders)
 

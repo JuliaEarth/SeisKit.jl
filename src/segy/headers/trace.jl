@@ -163,11 +163,9 @@ mutable struct TraceHeader
 end
 
 """
-    rawcoords(header::TraceHeader) -> (x, y)
+    rawcoords(header::TraceHeader) -> Tuple{Quantity, Quantity}
 
-Retrieve raw coordinates `(x, y)` from the
-SEG-Y trace `header`, applying coordinate
-scalar and unit.
+Retrieve raw coordinates from the SEG-Y trace `header`.
 """
 function rawcoords(header::TraceHeader)
   # retrieve coordinate values

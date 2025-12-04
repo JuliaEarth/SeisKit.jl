@@ -1,6 +1,7 @@
 @testset "TextualHeader" begin
   h = Segy.textualheader(joinpath(datadir, "stacked2Drev1.sgy"))
-  @test Segy.datum(h) == WGS84Latest
+  @test Segy.datum(h) === WGS84Latest
+  @test Segy.crs(h) === CRS
 end
 
 @testset "TraceHeader" begin
