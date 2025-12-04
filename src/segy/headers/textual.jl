@@ -73,8 +73,7 @@ function crs(header::TextualHeader)
       utmsouth(zone, datum=datum(header))
     end
   elseif c == "UNKNOWN"
-    # return generic CRS
-    CRS
+    error("CRS not found in textual header.")
   end
 end
 

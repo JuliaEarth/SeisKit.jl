@@ -182,17 +182,29 @@ function rawcoords(header::TraceHeader)
     y /= -s
   end
 
-  # apply coordinate unit
-  u = header.COORDINATE_UNIT
-  if u == 1
-    (x * u"m", y * u"m")
-  elseif u == 2
-    (x * u"s", y * u"s")
-  elseif u == 3
-    (x * u"°", y * u"°")
-  elseif u == 4
+  # identify coordinate unit
+  c = header.COORDINATE_UNIT
+  u = if c == 1
+    u"m"
+  elseif c == 2
+    u"s"
+  elseif c == 3
+    u"°"
+  elseif c == 4
     error("DMS coordinates not supported")
+  else
+    error("Unknown coordinate unit code: $c")
   end
+
+  # double check unit because some people
+  # save incorrect unit codes in the header 🤷
+  if abs(x) > 180 || abs(y) > 180
+    # cannot be degrees
+    u == u"°" && (u = u"m")
+  end
+
+  # apply coordinate unit
+  (x * u, y * u)
 end
 
 # write SEG-Y trace header to IO stream

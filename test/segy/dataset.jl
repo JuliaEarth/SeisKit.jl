@@ -4,5 +4,5 @@
   @test length(x) == length(d.traces)
   @test unit(first(first(x))) == u"m"
   @test Segy.datum(d) === WGS84Latest
-  @test Segy.crs(d) === CRS
+  @test_throws ErrorException Segy.crs(d)
 end
