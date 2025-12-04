@@ -17,6 +17,33 @@ struct Dataset{TraceHeaderVector<:FieldViewable}
 end
 
 """
+    image(dataset::Dataset) -> Matrix{Float64}
+
+Convert the traces in a 2D SEG-Y `dataset` to a 2D image
+(i.e., matrix of samples).
+"""
+function image(dataset::Dataset)
+  # retrieve inlines and crosslines
+  trh = dataset.traceheaders
+  ilines = trh.INLINE_NUMBER
+  xlines = trh.CROSSLINE_NUMBER
+
+  # check if dataset is 2D
+  nilines = length(unique(ilines))
+  nxlines = length(unique(xlines))
+  if nilines > 1 && nxlines > 1
+    error("Cannot convert 3D SEG-Y dataset to 2D image")
+  end
+
+  # sort traces by inlines and crosslines
+  inds = sortperm(collect(zip(ilines, xlines)))
+  traces = @view dataset.traces[inds]
+
+  # return matrix of samples
+  reduce(hcat, traces)
+end
+
+"""
     coords(dataset::Dataset) -> Vector{<:CoordRefSystems.CRS}
 
 Retrieve coordinates for all traces in the SEG-Y `dataset`
