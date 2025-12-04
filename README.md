@@ -463,6 +463,31 @@ We do not support saving in older revisions because:
 > to move to the revised (2.1) standard in an
 > expeditious fashion.
 
+### Retrieving coordinates
+
+The trace coordinates can be retrieved with the `Segy.coords` function.
+The package automatically detects the coordinate reference system (CRS)
+using various heuristics. If no CRS is found, the function returns a generic
+Cartesian system with units in meters.
+
+```juliajulia
+julia> Segy.coords(seismic)
+```
+
+### Converting to an image
+
+In the case of 2D seismic with fixed-length traces (e.g., 2D post-stack),
+it is often useful to place the traces side by side to form an image.
+For that, we provide the `Segy.image` function:
+
+```julia
+julia> Segy.image(seismic)
+```
+
+The function sorts the traces based on their inline and crossline
+numbers, and returns a simple 2D array (i.e., matrix) for image
+processing and visualization.
+
 ### Troubleshooting
 
 We provide the `Segy.report` function to report header information
