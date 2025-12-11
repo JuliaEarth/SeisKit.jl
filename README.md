@@ -470,7 +470,7 @@ The package automatically detects the coordinate reference system (CRS)
 using various heuristics. If no CRS is found, the function returns a generic
 Cartesian system with units in meters.
 
-```juliajulia
+```julia
 julia> Segy.coords(seismic)
 ```
 <details>
