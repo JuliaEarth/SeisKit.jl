@@ -526,9 +526,8 @@ julia> Segy.image(seismic)
 </pre>
 </details>
 
-The function sorts the traces based on their inline and crossline
-numbers, and returns a simple 2D array (i.e., matrix) for image
-processing and visualization.
+The function sorts the traces based on their positions, and returns
+a simple 2D array (i.e., matrix) for image processing and visualization.
 
 ### Troubleshooting
 

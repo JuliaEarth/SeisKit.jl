@@ -43,13 +43,8 @@ function image(dataset::Dataset)
   # make sure dataset is 2D
   ndims(dataset) == 2 || error("Cannot convert 3D SEG-Y dataset to 2D image")
 
-  # retrieve inlines and crosslines
-  trh = dataset.traceheaders
-  ilines = trh.INLINE_NUMBER
-  xlines = trh.CROSSLINE_NUMBER
-
-  # sort traces by inlines and crosslines
-  inds = sortperm(collect(zip(ilines, xlines)))
+  # sort traces by their positions
+  inds = sortperm(positions(dataset))
   traces = @view dataset.traces[inds]
 
   # return matrix of samples
