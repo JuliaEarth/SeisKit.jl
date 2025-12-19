@@ -57,6 +57,17 @@ function image(dataset::Dataset)
 end
 
 """
+    segment(dataset::Dataset) -> Meshes.Segment
+
+Retrieve the segment defined by the positions of the traces in a 2D SEG-Y `dataset`.
+"""
+function segment(dataset::Dataset)
+  ndims(dataset) == 2 || error("Cannot extract segment from positions of 3D SEG-Y dataset")
+  points = sort(positions(dataset))
+  Segment(first(points), last(points))
+end
+
+"""
     positions(dataset::Dataset) -> Vector{<:Meshes.Point}
 
 Retrieve positions for all traces in the SEG-Y `dataset`
