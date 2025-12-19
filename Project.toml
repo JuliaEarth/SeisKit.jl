@@ -6,6 +6,7 @@ authors = ["Júlio Hoffimann <julio.hoffimann@gmail.com> and contributors"]
 [deps]
 CoordRefSystems = "b46f11dc-f210-4604-bfba-323c1ec968cb"
 FieldViews = "ff5a1669-b1f2-423e-bbd7-b7fa0f7e0224"
+Meshes = "eacbb407-ea5a-433e-ab97-5258b1ca43fa"
 PrecompileTools = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
 PrettyTables = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
 StringEncodings = "69024149-9ee7-55f6-a4c4-859efe599b68"
@@ -16,6 +17,7 @@ WrappedUnions = "325db55a-9c6c-5b90-b1a2-ec87e7a38c44"
 [compat]
 CoordRefSystems = "0.19"
 FieldViews = "0.3"
+Meshes = "0.56"
 PrecompileTools = "1.2"
 PrettyTables = "3.1"
 StringEncodings = "0.3"
@@ -26,8 +28,9 @@ julia = "1.10"
 
 [extras]
 CoordRefSystems = "b46f11dc-f210-4604-bfba-323c1ec968cb"
+Meshes = "eacbb407-ea5a-433e-ab97-5258b1ca43fa"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [targets]
-test = ["Test", "CoordRefSystems", "Unitful"]
+test = ["Test", "Meshes", "CoordRefSystems", "Unitful"]

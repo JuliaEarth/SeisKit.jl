@@ -44,6 +44,13 @@ function image(dataset::Dataset)
 end
 
 """
+    positions(dataset::Dataset) -> Vector{<:Meshes.Point}
+
+Retrieve positions for all traces in the SEG-Y `dataset`
+"""
+positions(dataset::Dataset) = map(Point, coords(dataset))
+
+"""
     coords(dataset::Dataset) -> Vector{<:CoordRefSystems.CRS}
 
 Retrieve coordinates for all traces in the SEG-Y `dataset`

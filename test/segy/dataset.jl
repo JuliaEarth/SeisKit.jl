@@ -6,5 +6,6 @@
   @test Segy.datum(d) === WGS84Latest
   @test_throws ErrorException Segy.crs(d)
   @test Segy.coords(d) == [Cartesian{WGS84Latest}(x, y) for (x, y) in xy]
+  @test Segy.positions(d) == [Point(Cartesian{WGS84Latest}(x, y)) for (x, y) in xy]
   @test Segy.image(d) isa Matrix{Float64}
 end
