@@ -463,37 +463,33 @@ We do not support saving in older revisions because:
 > to move to the revised (2.1) standard in an
 > expeditious fashion.
 
-### Retrieving coordinates
+### Retrieving trace positions
 
-The trace coordinates can be retrieved with the `Segy.coords` function.
+The trace positions can be retrieved with the `Segy.positions` function.
 The package automatically detects the coordinate reference system (CRS)
 using various heuristics. If no CRS is found, the function returns a generic
 Cartesian system with units in meters.
 
 ```julia
-julia> Segy.coords(seismic)
+julia> Segy.positions(seismic)
 ```
 <details>
 <summary>Click to expand output</summary>
 <pre>
-7701-element Vector{CoordRefSystems.Cartesian2D{CoordRefSystems.WGS84Latest, Unitful.Quantity{Float64, 𝐋, Unitful.FreeUnits{(m,), 𝐋, nothing}}}}:
- Cartesian{WGS84Latest}(x: 4.73201e5 m, y: 7.19431e6 m)
- Cartesian{WGS84Latest}(x: 4.73209e5 m, y: 7.19433e6 m)
- Cartesian{WGS84Latest}(x: 4.73216e5 m, y: 7.19436e6 m)
- Cartesian{WGS84Latest}(x: 4.73224e5 m, y: 7.19438e6 m)
- Cartesian{WGS84Latest}(x: 4.73231e5 m, y: 7.1944e6 m)
- Cartesian{WGS84Latest}(x: 4.73239e5 m, y: 7.19443e6 m)
- Cartesian{WGS84Latest}(x: 4.73246e5 m, y: 7.19445e6 m)
- Cartesian{WGS84Latest}(x: 4.73254e5 m, y: 7.19448e6 m)
+7701-element Vector{Meshes.Point{Meshes.𝔼{2}, CoordRefSystems.Cartesian2D{CoordRefSystems.WGS84Latest, Unitful.Quantity{Float64, 𝐋, Unitful.FreeUnits{(m,), 𝐋, nothing}}}}}:
+ Point(x: 473201.12 m, y: 7.19430976e6 m)
+ Point(x: 473208.64 m, y: 7.1943328e6 m)
+ Point(x: 473216.16 m, y: 7.19435712e6 m)
+ Point(x: 473223.64 m, y: 7.1943808e6 m)
+ Point(x: 473231.16 m, y: 7.19440448e6 m)
+ Point(x: 473238.68 m, y: 7.1944288e6 m)
  ⋮
- Cartesian{WGS84Latest}(x: 4.6637e5 m, y: 7.19759e6 m)
- Cartesian{WGS84Latest}(x: 466378.0 m, y: 7.19761e6 m)
- Cartesian{WGS84Latest}(x: 4.66386e5 m, y: 7.19764e6 m)
- Cartesian{WGS84Latest}(x: 466393.0 m, y: 7.19766e6 m)
- Cartesian{WGS84Latest}(x: 4.66401e5 m, y: 7.19768e6 m)
- Cartesian{WGS84Latest}(x: 466408.0 m, y: 7.19771e6 m)
- Cartesian{WGS84Latest}(x: 4.66416e5 m, y: 7.19773e6 m)
- Cartesian{WGS84Latest}(x: 466423.0 m, y: 7.19775e6 m)
+ Point(x: 466385.52 m, y: 7.1976352e6 m)
+ Point(x: 466393.0 m, y: 7.19765888e6 m)
+ Point(x: 466400.52 m, y: 7.19768256e6 m)
+ Point(x: 466408.04 m, y: 7.19770624e6 m)
+ Point(x: 466415.52 m, y: 7.19773056e6 m)
+ Point(x: 466423.04 m, y: 7.19775424e6 m)
 </pre>
 </details>
 
