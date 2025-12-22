@@ -497,10 +497,13 @@ julia> Segy.positions(seismic)
 
 In the case of 2D seismic with fixed-length traces (e.g., 2D post-stack),
 it is often useful to place the traces side by side to form an image.
-For that, we provide the `Segy.image` function:
+For that, we provide the `Segy.matrix` and `Segy.image` functions.
+
+The `Segy.matrix` function sorts the traces based on their positions,
+and returns a simple 2D array (i.e., matrix) without geospatial information:
 
 ```julia
-julia> Segy.image(seismic)
+julia> Segy.matrix(seismic)
 ```
 <details>
 <summary>Click to expand output</summary>
@@ -526,8 +529,36 @@ julia> Segy.image(seismic)
 </pre>
 </details>
 
-The function sorts the traces based on their positions, and returns
-a simple 2D array (i.e., matrix) for image processing and visualization.
+The `Segy.image` function performs the additional step of georeferencing
+the matrix over a structured grid, returning a `GeoTable` object:
+
+```julia
+julia> img = Segy.image(seismic)
+```
+<details>
+<summary>Click to expand output</summary>
+<pre>
+                                          2695000×2 GeoTable over 350×7700 StructuredGrid
+┌────────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│   signal   │                                                      geometry                                                       │
+│ Continuous │                                                     Quadrangle                                                      │
+│ [NoUnits]  │                                                � Cartesian{NoDatum}                                                 │
+├────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│  1497.87   │       Quadrangle((x: 4.66048e5 m, y: 7.19656e6 m, z: 0.0 m), ..., (x: 4.66055e5 m, y: 7.19659e6 m, z: 0.0 m))       │
+│  1497.87   │   Quadrangle((x: 4.66048e5 m, y: 7.19656e6 m, z: 55694.7 m), ..., (x: 4.66055e5 m, y: 7.19659e6 m, z: 55694.7 m))   │
+│  1494.58   │ Quadrangle((x: 4.66048e5 m, y: 7.19656e6 m, z: 1.11389e5 m), ..., (x: 4.66055e5 m, y: 7.19659e6 m, z: 1.11389e5 m)) │
+│  1491.23   │  Quadrangle((x: 4.66048e5 m, y: 7.19656e6 m, z: 167084.0 m), ..., (x: 4.66055e5 m, y: 7.19659e6 m, z: 167084.0 m))  │
+│  1487.38   │ Quadrangle((x: 4.66048e5 m, y: 7.19656e6 m, z: 2.22779e5 m), ..., (x: 4.66055e5 m, y: 7.19659e6 m, z: 2.22779e5 m)) │
+│  1484.58   │ Quadrangle((x: 4.66048e5 m, y: 7.19656e6 m, z: 2.78473e5 m), ..., (x: 4.66055e5 m, y: 7.19659e6 m, z: 2.78473e5 m)) │
+│  1484.19   │  Quadrangle((x: 4.66048e5 m, y: 7.19656e6 m, z: 334168.0 m), ..., (x: 4.66055e5 m, y: 7.19659e6 m, z: 334168.0 m))  │
+│  1486.54   │ Quadrangle((x: 4.66048e5 m, y: 7.19656e6 m, z: 3.89863e5 m), ..., (x: 4.66055e5 m, y: 7.19659e6 m, z: 3.89863e5 m)) │
+│  1488.79   │ Quadrangle((x: 4.66048e5 m, y: 7.19656e6 m, z: 4.45557e5 m), ..., (x: 4.66055e5 m, y: 7.19659e6 m, z: 4.45557e5 m)) │
+│  1491.16   │ Quadrangle((x: 4.66048e5 m, y: 7.19656e6 m, z: 5.01252e5 m), ..., (x: 4.66055e5 m, y: 7.19659e6 m, z: 5.01252e5 m)) │
+│     ⋮      │                                                          ⋮                                                          │
+└────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                2694990 rows omitted
+</pre>
+</details>
 
 ### Troubleshooting
 
