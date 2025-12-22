@@ -34,14 +34,13 @@ function ndims(dataset::Dataset)
 end
 
 """
-    image(dataset::Dataset) -> Matrix{Float64}
+    matrix(dataset::Dataset) -> Matrix{Float64}
 
-Convert the traces in a 2D SEG-Y `dataset` to a 2D image
-(i.e., matrix of samples).
+Convert the traces in a 2D SEG-Y `dataset` into a matrix of samples.
 """
-function image(dataset::Dataset)
+function matrix(dataset::Dataset)
   # make sure dataset is 2D
-  ndims(dataset) == 2 || error("Cannot convert 3D SEG-Y dataset to 2D image")
+  ndims(dataset) == 2 || error("Cannot convert 3D SEG-Y dataset to a matrix")
 
   # sort traces by their positions
   inds = sortperm(positions(dataset))
