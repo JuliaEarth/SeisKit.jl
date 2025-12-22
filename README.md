@@ -560,6 +560,11 @@ julia> img = Segy.image(seismic)
 </pre>
 </details>
 
+An optional `velocity` value can be provided to scale the time/depth axis.
+By default, the velocity is set to `1500` m/s (typical for water).
+
+```julia
+
 ### Troubleshooting
 
 We provide the `Segy.report` function to report header information

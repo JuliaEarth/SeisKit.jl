@@ -34,11 +34,13 @@ function ndims(dataset::Dataset)
 end
 
 """
-    image(dataset::Dataset) -> GeoTables.GeoTable
+    image(dataset::Dataset; velocity=1500.0) -> GeoTables.GeoTable
 
 Convert the traces in a 2D SEG-Y `dataset` into a georeferenced image.
+A `velocity` value in m/s can be provided to scale the time/depth axis.
+By default, the velocity is set to 1500 m/s (typical for water).
 """
-function image(dataset::Dataset)
+function image(dataset::Dataset; velocity=1500.0)
   # extract matrix of samples
   S = matrix(dataset)
 
@@ -51,7 +53,7 @@ function image(dataset::Dataset)
   ys = last.(xy)
 
   # compute z coordinate
-  δz = dataset.binaryheader.SAMPLE_INTERVAL * u"m"
+  δz = dataset.binaryheader.SAMPLE_INTERVAL * (velocity / 1e6) * u"m"
   zs = range(0u"m", -δz * size(S, 1), length=size(S, 1))
 
   # build coordinate arrays
