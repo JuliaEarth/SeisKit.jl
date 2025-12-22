@@ -6,6 +6,7 @@ authors = ["Júlio Hoffimann <julio.hoffimann@gmail.com> and contributors"]
 [deps]
 CoordRefSystems = "b46f11dc-f210-4604-bfba-323c1ec968cb"
 FieldViews = "ff5a1669-b1f2-423e-bbd7-b7fa0f7e0224"
+GeoTables = "e502b557-6362-48c1-8219-d30d308dcdb0"
 Meshes = "eacbb407-ea5a-433e-ab97-5258b1ca43fa"
 PrecompileTools = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
 PrettyTables = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
@@ -17,6 +18,7 @@ WrappedUnions = "325db55a-9c6c-5b90-b1a2-ec87e7a38c44"
 [compat]
 CoordRefSystems = "0.19"
 FieldViews = "0.3"
+GeoTables = "1.28"
 Meshes = "0.56"
 PrecompileTools = "1.2"
 PrettyTables = "3.1"

@@ -24,9 +24,11 @@ using StyledStrings
 using PrettyTables
 using WrappedUnions
 using FieldViews
-using Meshes
-using CoordRefSystems
 using Unitful
+
+using Meshes
+using GeoTables
+using CoordRefSystems
 
 # IBM floating point type
 include("segy/ibmfloat.jl")

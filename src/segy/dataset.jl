@@ -34,6 +34,42 @@ function ndims(dataset::Dataset)
 end
 
 """
+    image(dataset::Dataset) -> GeoTables.GeoTable
+
+Convert the traces in a 2D SEG-Y `dataset` into a georeferenced image.
+"""
+function image(dataset::Dataset)
+  # extract matrix of samples
+  S = matrix(dataset)
+
+  # extract x and y coordinates
+  xy = map(sort(positions(dataset))) do p
+    c = convert(Cartesian, Meshes.coords(p))
+    c.x, c.y
+  end
+  xs = first.(xy)
+  ys = last.(xy)
+
+  # compute z coordinate
+  δz = dataset.binaryheader.SAMPLE_INTERVAL * u"m"
+  zs = range(0u"m", -δz * size(S, 1), length=size(S, 1))
+
+  # build coordinate arrays
+  X = repeat(transpose(xs), size(S, 1), 1)
+  Y = repeat(transpose(ys), size(S, 1), 1)
+  Z = repeat(zs, 1, size(S, 2))
+
+  # build grid topology
+  t = GridTopology(size(S) .- 1)
+
+  # build structured grid
+  g = StructuredGrid((X, Y, Z), t)
+
+  # georeference samples over grid
+  georef((; signal=vec(S)), g)
+end
+
+"""
     matrix(dataset::Dataset) -> Matrix{Float64}
 
 Convert the traces in a 2D SEG-Y `dataset` into a matrix of samples.
