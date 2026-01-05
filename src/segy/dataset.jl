@@ -68,7 +68,7 @@ function image(dataset::Dataset; velocity=4000.0)
   g = StructuredGrid((X, Y, Z), t)
 
   # georeference samples over grid
-  georef((; signal=vec(S)), g)
+  GeoTable(g, vtable=(; signal=vec(S)))
 end
 
 """
