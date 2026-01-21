@@ -34,13 +34,13 @@ function ndims(dataset::Dataset)
 end
 
 """
-    matrix(dataset::Dataset) -> Matrix{Float64}
+    image(dataset::Dataset) -> Matrix{Float64}
 
-Convert the traces in a 2D SEG-Y `dataset` into a matrix of samples.
+Convert the traces in a 2D SEG-Y `dataset` to an image (i.e., matrix of samples).
 """
-function matrix(dataset::Dataset)
+function image(dataset::Dataset)
   # make sure dataset is 2D
-  ndims(dataset) == 2 || error("Cannot convert 3D SEG-Y dataset to a matrix")
+  ndims(dataset) == 2 || error("Cannot convert 3D SEG-Y dataset to a 2D image")
 
   # sort traces by their positions
   inds = sortperm(positions(dataset))
@@ -53,7 +53,7 @@ end
 """
     grid(dataset::Dataset; velocity=4000.0) -> Meshes.StructuredGrid
 
-Retrieve structured grid from the 2D SEG-Y `dataset` such that trace
+Retrieve structured grid from a 2D SEG-Y `dataset` such that trace
 values correspond to grid vertices.
 
 A `velocity` value in m/s can be provided to scale the time/depth axis.
@@ -61,7 +61,7 @@ By default, the velocity is set to 4000 m/s (marine sedimentary rock).
 """
 function grid(dataset::Dataset; velocity=4000.0)
   # make sure dataset is 2D
-  ndims(dataset) == 2 || error("Cannot convert 3D SEG-Y dataset to a 2D grid")
+  ndims(dataset) == 2 || error("Cannot extract 2D grid from 3D SEG-Y dataset")
 
   # extract x and y coordinates
   xy = map(sort(positions(dataset))) do p
@@ -94,7 +94,7 @@ end
 Retrieve the segment defined by the positions of the traces in a 2D SEG-Y `dataset`.
 """
 function segment(dataset::Dataset)
-  ndims(dataset) == 2 || error("Cannot extract segment from positions of 3D SEG-Y dataset")
+  ndims(dataset) == 2 || error("Cannot extract 2D segment from positions of 3D SEG-Y dataset")
   points = sort(positions(dataset))
   Segment(first(points), last(points))
 end

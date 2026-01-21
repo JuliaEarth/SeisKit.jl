@@ -9,17 +9,17 @@
   @test Segy.coords(d) == [Cartesian{WGS84Latest}(x, y) for (x, y) in xy]
   @test Segy.positions(d) == [Point(Cartesian{WGS84Latest}(x, y)) for (x, y) in xy]
   @test Segy.ndims(d) == 2
-  @test Segy.matrix(d) isa Matrix{Float64}
+  @test Segy.image(d) isa Matrix{Float64}
   @test Segy.segment(d) == let
     points = sort(Segy.positions(d))
     Segment(first(points), last(points))
   end
 
-  # high-level api
-  mat = Segy.matrix(d)
+  # image and grid relations
+  img = Segy.image(d)
   grid = Segy.grid(d)
   @test grid isa StructuredGrid
   @test size(grid) == (350, 7700)
-  @test size(mat) == size(grid) .+ 1
+  @test size(img) == size(grid) .+ 1
   @test Segy.grid(d, velocity=4000.0) == Segy.grid(d)
 end
