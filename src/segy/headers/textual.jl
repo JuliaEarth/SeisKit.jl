@@ -91,7 +91,7 @@ function crsstring(header::TextualHeader)
   isnothing(m) || return only(m.captures)
 
   # search for "UTM ZONE ___" pattern
-  m = match(r"\(?\butm\b\)?\s*,?\s+\bzone\b:?\s*(id)?\s+(\d+\s*[ns]?)"i, text)
+  m = match(r"\(?\b(utm)?\b\)?\s*,?\s+\bzone\b:?\s*(id)?\s+(\d+\s*[ns]?)"i, text)
   isnothing(m) || return "UTM:" * last(m.captures)
 
   # return UNKNOWN string as default CRS
