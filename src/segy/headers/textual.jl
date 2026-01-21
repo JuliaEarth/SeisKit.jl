@@ -104,43 +104,46 @@ end
 Retrieve datum from the SEG-Y textual `header`.
 """
 function datum(header::TextualHeader)
-  # remove dashes from datum string
-  d = replace(datumstring(header), "-" => "")
+  d = WGS84Latest # default datum
+  for s in datumstrings(header)
+    # remove dashes from datum string
+    s = replace(s, "-" => "")
 
-  # standardize to uppercase
-  d = uppercase(d)
+    # standardize to uppercase
+    s = uppercase(s)
 
-  # convert to datum type
-  if d == "WGS84"
-    WGS84Latest
-  elseif d == "ED50"
-    ED50
-  elseif d == "SAD69"
-    SAD69
-  else
-    error("Unsupported datum: $d. Please open an issue to request support.")
+    # convert to datum type
+    if s == "WGS84"
+      d = WGS84Latest
+      break
+    elseif s == "ED50"
+      d = ED50
+      break
+    elseif s == "SAD69"
+      d = SAD69
+      break
+    end
   end
+  d
 end
 
 """
-    datumstring(header::TextualHeader) -> String
+    datumstrings(header::TextualHeader) -> String
 
-Retrieve datum string from the SEG-Y textual `header`.
+Retrieve datum string(s) from the SEG-Y textual `header`.
 """
-function datumstring(header::TextualHeader)
+function datumstrings(header::TextualHeader)
   # retrieve text content
   text = header.content
 
   # search for "DATUM ___" pattern
-  m = match(r"\bdatum\b:?\s*(\w+-?\d*)"i, text)
-  isnothing(m) || return only(m.captures)
+  m1 = map(m -> only(m.captures), eachmatch(r"\bdatum\b:?\s*(\w+-?\d*)"i, text))
 
   # search for "ON ___ DATUM" pattern
-  m = match(r"\bon\b\s+(\w+\d*)\s*\bdatum\b"i, text)
-  isnothing(m) || return only(m.captures)
+  m2 = map(m -> only(m.captures), eachmatch(r"\bon\b\s+(\w+\d*)\s*\bdatum\b"i, text))
 
-  # return WGS84 as default datum
-  "WGS84"
+  # list all matches in order of priority
+  [m1; m2]
 end
 
 # write SEG-Y textual header to IO stream
