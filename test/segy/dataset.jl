@@ -18,7 +18,7 @@
   # high-level api
   mat = Segy.matrix(d)
   img = Segy.image(d)
-  grid = img.geometry
+  grid = Segy.grid(d)
   vals = values(img, 0)
   @test isnothing(values(img))
   @test grid isa StructuredGrid

@@ -44,28 +44,8 @@ function image(dataset::Dataset; velocity=4000.0)
   # extract matrix of samples
   S = matrix(dataset)
 
-  # extract x and y coordinates
-  xy = map(sort(positions(dataset))) do p
-    c = convert(Cartesian, Meshes.coords(p))
-    c.x, c.y
-  end
-  xs = first.(xy)
-  ys = last.(xy)
-
-  # compute z coordinate
-  δz = dataset.binaryheader.SAMPLE_INTERVAL * (velocity / 1e6) * u"m"
-  zs = range(0u"m", -δz * size(S, 1), length=size(S, 1))
-
-  # build coordinate arrays
-  X = repeat(transpose(xs), size(S, 1), 1)
-  Y = repeat(transpose(ys), size(S, 1), 1)
-  Z = repeat(zs, 1, size(S, 2))
-
-  # build grid topology
-  t = GridTopology(size(S) .- 1)
-
-  # build structured grid
-  g = StructuredGrid((X, Y, Z), t)
+  # extract structured grid
+  g = grid(dataset; velocity)
 
   # georeference samples over grid
   GeoTable(g, vtable=(; signal=vec(S)))
@@ -86,6 +66,44 @@ function matrix(dataset::Dataset)
 
   # return matrix of samples
   reduce(hcat, traces)
+end
+
+"""
+    grid(dataset::Dataset; velocity=4000.0) -> Meshes.StructuredGrid
+
+Retrieve structured grid from the 2D SEG-Y `dataset` such that trace
+values correspond to grid vertices.
+
+A `velocity` value in m/s can be provided to scale the time/depth axis.
+By default, the velocity is set to 4000 m/s (marine sedimentary rock).
+"""
+function grid(dataset::Dataset; velocity=4000.0)
+  # make sure dataset is 2D
+  ndims(dataset) == 2 || error("Cannot convert 3D SEG-Y dataset to a 2D grid")
+
+  # extract x and y coordinates
+  xy = map(sort(positions(dataset))) do p
+    c = convert(Cartesian, Meshes.coords(p))
+    c.x, c.y
+  end
+  xs = first.(xy)
+  ys = last.(xy)
+
+  # compute z coordinate
+  nz = length(first(dataset.traces))
+  δz = dataset.binaryheader.SAMPLE_INTERVAL * (velocity / 1e6) * u"m"
+  zs = range(0u"m", -δz * nz, length=nz)
+
+  # build coordinate arrays
+  X = repeat(transpose(xs), nz, 1)
+  Y = repeat(transpose(ys), nz, 1)
+  Z = repeat(zs, 1, length(xs))
+
+  # build grid topology
+  t = GridTopology((length(zs) - 1, length(xs) - 1))
+
+  # build structured grid
+  StructuredGrid((X, Y, Z), t)
 end
 
 """
