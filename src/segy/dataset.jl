@@ -34,24 +34,6 @@ function ndims(dataset::Dataset)
 end
 
 """
-    image(dataset::Dataset; velocity=4000.0) -> GeoTables.GeoTable
-
-Convert the traces in a 2D SEG-Y `dataset` into a georeferenced image.
-A `velocity` value in m/s can be provided to scale the time/depth axis.
-By default, the velocity is set to 4000 m/s (marine sedimentary rock).
-"""
-function image(dataset::Dataset; velocity=4000.0)
-  # extract matrix of samples
-  S = matrix(dataset)
-
-  # extract structured grid
-  g = grid(dataset; velocity)
-
-  # georeference samples over grid
-  GeoTable(g, vtable=(; signal=vec(S)))
-end
-
-"""
     matrix(dataset::Dataset) -> Matrix{Float64}
 
 Convert the traces in a 2D SEG-Y `dataset` into a matrix of samples.

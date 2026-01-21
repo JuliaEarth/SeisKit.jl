@@ -27,7 +27,6 @@ using FieldViews
 using Unitful
 
 using Meshes
-using GeoTables
 using CoordRefSystems
 
 # IBM floating point type

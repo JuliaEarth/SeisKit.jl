@@ -17,13 +17,9 @@
 
   # high-level api
   mat = Segy.matrix(d)
-  img = Segy.image(d)
   grid = Segy.grid(d)
-  vals = values(img, 0)
-  @test isnothing(values(img))
   @test grid isa StructuredGrid
   @test size(grid) == (350, 7700)
   @test size(mat) == size(grid) .+ 1
-  @test vals.signal == vec(mat)
-  @test Segy.image(d, velocity=4000.0) == Segy.image(d)
+  @test Segy.grid(d, velocity=4000.0) == Segy.grid(d)
 end
