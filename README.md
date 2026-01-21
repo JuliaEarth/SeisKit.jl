@@ -497,13 +497,10 @@ julia> Segy.positions(seismic)
 
 In the case of 2D seismic with fixed-length traces (e.g., 2D post-stack),
 it is often useful to place the traces side by side to form an image.
-For that, we provide the `Segy.matrix` and `Segy.image` functions.
-
-The `Segy.matrix` function sorts the traces based on their positions,
-and returns a simple 2D array (i.e., matrix) without geospatial information:
+For that, we provide the `Segy.image` function:
 
 ```julia
-julia> Segy.matrix(seismic)
+julia> Segy.image(seismic)
 ```
 <details>
 <summary>Click to expand output</summary>
@@ -529,18 +526,41 @@ julia> Segy.matrix(seismic)
 </pre>
 </details>
 
-The `Segy.image` function performs the additional step of georeferencing
-the matrix over a structured grid, returning a `GeoTable` object with values
-at vertices:
+The `Segy.grid` function extracts the corresponding structured grid.
+The values in the image (i.e., matrix) are associated with vertices of
+a structured grid, which can be obtained with the `Segy.grid` function:
 
 ```julia
-julia> img = Segy.image(seismic)
-julia> values(img, 0)
+julia> grid = Segy.grid(seismic)
 ```
 <details>
 <summary>Click to expand output</summary>
 <pre>
-(signal = [1497.869384765625, 1497.869384765625, 1494.58203125, 1491.230224609375, 1487.3798828125, 1484.58154296875, 1484.1943359375, 1486.5390625, 1488.794189453125, 1491.158935546875  …  4546.09765625, 4520.8046875, 4320.70703125, 4147.26953125, 4145.51171875, 4147.3671875, 4147.66015625, 4146.78125, 4147.171875, 4146.87890625],)
+350×7700 StructuredGrid
+  2703051 vertices
+  ├─ Point(x: 466047.56 m, y: 7.19656192e6 m, z: 0.0 m)
+  ├─ Point(x: 466047.56 m, y: 7.19656192e6 m, z: -40.114285714285714 m)
+  ├─ Point(x: 466047.56 m, y: 7.19656192e6 m, z: -80.22857142857143 m)
+  ├─ Point(x: 466047.56 m, y: 7.19656192e6 m, z: -120.34285714285714 m)
+  ├─ Point(x: 466047.56 m, y: 7.19656192e6 m, z: -160.45714285714286 m)
+  ⋮
+  ├─ Point(x: 473576.6 m, y: 7.19550144e6 m, z: -13879.542857142857 m)
+  ├─ Point(x: 473576.6 m, y: 7.19550144e6 m, z: -13919.657142857142 m)
+  ├─ Point(x: 473576.6 m, y: 7.19550144e6 m, z: -13959.771428571428 m)
+  ├─ Point(x: 473576.6 m, y: 7.19550144e6 m, z: -13999.885714285714 m)
+  └─ Point(x: 473576.6 m, y: 7.19550144e6 m, z: -14040.0 m)
+  2695000 elements
+  ├─ Quadrangle(1, 2, 353, 352)
+  ├─ Quadrangle(2, 3, 354, 353)
+  ├─ Quadrangle(3, 4, 355, 354)
+  ├─ Quadrangle(4, 5, 356, 355)
+  ├─ Quadrangle(5, 6, 357, 356)
+  ⋮
+  ├─ Quadrangle(2702695, 2702696, 2703047, 2703046)
+  ├─ Quadrangle(2702696, 2702697, 2703048, 2703047)
+  ├─ Quadrangle(2702697, 2702698, 2703049, 2703048)
+  ├─ Quadrangle(2702698, 2702699, 2703050, 2703049)
+  └─ Quadrangle(2702699, 2702700, 2703051, 2703050)
 </pre>
 </details>
 
