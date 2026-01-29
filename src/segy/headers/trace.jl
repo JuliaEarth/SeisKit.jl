@@ -172,6 +172,12 @@ function rawcoords(header::TraceHeader)
   x = float(header.ENSEMBLE_X)
   y = float(header.ENSEMBLE_Y)
 
+  # if coordinates are zero, use source/receiver midpoints
+  if iszero(x) && iszero(y)
+    x = (float(header.SOURCE_X) + float(header.RECEIVER_X)) / 2
+    y = (float(header.SOURCE_Y) + float(header.RECEIVER_Y)) / 2
+  end
+
   # apply coordinate scalar
   s = header.COORDINATE_SCALAR
   if s > 0
