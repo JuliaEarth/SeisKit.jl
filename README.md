@@ -527,8 +527,8 @@ julia> Segy.image(seismic)
 </details>
 
 The `Segy.grid` function extracts the corresponding structured grid.
-The values in the image (i.e., matrix) are associated with vertices of
-a structured grid, which can be obtained with the `Segy.grid` function:
+The values in the `Segy.image` (i.e., matrix) are associated with the
+vertices of the grid:
 
 ```julia
 julia> grid = Segy.grid(seismic)
@@ -566,8 +566,6 @@ julia> grid = Segy.grid(seismic)
 
 An optional `velocity` value can be provided to scale the time/depth axis.
 By default, the velocity is set to `4000` m/s (marine sedimentary rocks).
-
-```julia
 
 ### Troubleshooting
 
