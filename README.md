@@ -449,8 +449,8 @@ SEG-Y Dataset (rev 1.0)
 ```
 
 The arrays are stored in the `seismic.traces` field. It is
-also possible to load a subset of traces by specifying their
-indices in the file:
+also possible to load a subset of traces by listing their
+indices in the file as an additional argument:
 
 ```julia
 julia> seismic = Segy.load("test/data/stacked2Drev1.sgy", 1:10)
@@ -463,10 +463,10 @@ SEG-Y Dataset (rev 1.0)
 └─ X-lines: 7200 (fixed)
 ```
 
-A common pattern with large datasets is to extract the
-`Segy.traceheaders` and `findall` indices that satisfy
-some criteria. These indices can then be specified as
-an additional argument in `Segy.traces`.
+A common workflow with large datasets consists of extracting
+the `Segy.traceheaders` and `findall` indices that satisfy
+some criteria (e.g., traces in the same CMP gather). These
+indices can then be used in `Segy.traces` calls.
 
 The `Segy.save` function can be used to write the data back to
 a file that is compliant with SEG-Y rev 2.1:
