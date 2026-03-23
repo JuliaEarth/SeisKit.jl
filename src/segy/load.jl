@@ -3,18 +3,23 @@
 # ------------------------------------------------------------------
 
 """
-    load(fname::AbstractString)
+    load(fname::AbstractString[, traceinds]) -> Dataset
 
 Load SEG-Y data from the file `fname`.
+
+Optionally, specify a subset of `traceinds` to load.
 """
-load(fname::AbstractString) = open(load, fname)
+load(fname::AbstractString, traceinds=nothing) = open(io -> load(io, traceinds), fname)
 
 """
-    load(io::IO)
+    load(io::IO[, traceinds]) -> Dataset
 
 Load SEG-Y data from the IO stream `io`.
+
+Optionally, specify a subset of `traceinds` to load.
 """
-function load(io::IO)
+function load(io::IO, traceinds=nothing)
   th, bh, eh, trh = headers(io)
-  Dataset(th, bh, eh, trh, traces(io, trh))
+  inds = isnothing(traceinds) ? (1:length(trh)) : traceinds
+  Dataset(th, bh, eh, view(trh, inds), traces(io, trh, inds))
 end
