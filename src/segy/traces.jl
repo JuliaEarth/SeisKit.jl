@@ -30,9 +30,6 @@ function traces(io::IO, trh, inds=1:length(trh))
   # samples per trace (from binary header)
   SAMPLES_PER_TRACE = samplespertrace(io)
 
-  # number of traces
-  ntraces = length(trh)
-
   # number of samples in each trace
   nsamples = Int.(replace(trh.SAMPLES_IN_TRACE, 0 => SAMPLES_PER_TRACE))
 
@@ -42,25 +39,30 @@ function traces(io::IO, trh, inds=1:length(trh))
   # load file into RAM if size permits
   buff = filesize(io) < Sys.free_memory() ÷ 2 ? IOBuffer(read(io)) : io
 
+  # sort trace indices to read traces in order
+  sortedinds = sort(inds)
+
   # pre-allocate array of traces
-  data = [Vector{Float64}(undef, nsamples[j]) for j in inds]
+  data = [Vector{Float64}(undef, nsamples[ind]) for ind in sortedinds]
 
   # consume trace bytes
-  current = 0
-  indpool = Set(inds)
-  @inbounds for j in 1:ntraces
-    # skip trace header
+  prev = 1
+  @inbounds for (j, ind) in enumerate(sortedinds)
+    # skip all traces before the current trace
+    for k in prev:ind-1
+      skip(buff, TRACE_HEADER_SIZE + nsamples[k] * sizeof(NUMBER_TYPE))
+    end
+
+    # skip trace header of current trace
     skip(buff, TRACE_HEADER_SIZE)
 
     # read trace samples
-    if j ∈ indpool
-      samples = data[(current += 1)]
-      for i in 1:nsamples[j]
-        samples[i] = swapbytes(read(buff, NUMBER_TYPE))
-      end
-    else
-      skip(buff, nsamples[j] * sizeof(NUMBER_TYPE))
+    samples = data[j]
+    for i in 1:nsamples[ind]
+      samples[i] = swapbytes(read(buff, NUMBER_TYPE))
     end
+
+    prev = ind + 1
   end
 
   data
