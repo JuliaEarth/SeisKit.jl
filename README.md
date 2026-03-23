@@ -448,9 +448,28 @@ SEG-Y Dataset (rev 1.0)
 └─ X-lines: 7200 ─ 7500
 ```
 
-The arrays are stored in the `seismic.traces` field. The `Segy.save`
-function can be used to write the data back to a file that is compliant
-with SEG-Y rev 2.1:
+The arrays are stored in the `seismic.traces` field. It is
+also possible to load a subset of traces by listing their
+indices in the file as an additional argument:
+
+```julia
+julia> seismic = Segy.load("test/data/stacked2Drev1.sgy", 1:10)
+```
+```
+SEG-Y Dataset (rev 1.0)
+├─ Nᵒ traces: 10
+├─ Nᵒ samples: 351 (fixed)
+├─ Inlines: 0 (fixed)
+└─ X-lines: 7200 (fixed)
+```
+
+A common workflow with large datasets consists of extracting
+the `Segy.traceheaders` and `findall` indices that satisfy
+some criteria (e.g., traces in the same CMP gather). These
+indices can then be used in `Segy.traces` calls.
+
+The `Segy.save` function can be used to write the data back to
+a file that is compliant with SEG-Y rev 2.1:
 
 ```julia
 julia> Segy.save("path/to/newfile.sgy", seismic)
