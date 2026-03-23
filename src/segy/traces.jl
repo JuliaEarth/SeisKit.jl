@@ -49,7 +49,7 @@ function traces(io::IO, trh, inds=1:length(trh))
   prev = 1
   @inbounds for (j, ind) in enumerate(sortedinds)
     # skip all data before the current trace
-    for k in prev:ind-1
+    for k in prev:(ind - 1)
       skip(buff, TRACE_HEADER_SIZE + nsamples[k] * sizeof(NUMBER_TYPE))
     end
 
