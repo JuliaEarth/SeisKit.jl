@@ -5,4 +5,9 @@
   @test length(seis.traceheaders) == 7701
   @test seis.binaryheader.SAMPLES_PER_TRACE == 351
   @test seis.binaryheader.SAMPLE_INTERVAL == 0x2710
+
+  # load a subset of traces based on their indices
+  seis = Segy.load(joinpath(datadir, "stacked2Drev1.sgy"), 11:20)
+  @test length(seis.traces) == 10
+  @test length(seis.traceheaders) == 10
 end
