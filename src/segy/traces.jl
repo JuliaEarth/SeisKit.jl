@@ -48,7 +48,7 @@ function traces(io::IO, trh, inds=1:length(trh))
   # consume trace bytes
   prev = 1
   @inbounds for (j, ind) in enumerate(sortedinds)
-    # skip all traces before the current trace
+    # skip all data before the current trace
     for k in prev:ind-1
       skip(buff, TRACE_HEADER_SIZE + nsamples[k] * sizeof(NUMBER_TYPE))
     end
@@ -56,7 +56,7 @@ function traces(io::IO, trh, inds=1:length(trh))
     # skip trace header of current trace
     skip(buff, TRACE_HEADER_SIZE)
 
-    # read trace samples
+    # read trace samples of current trace
     samples = data[j]
     for i in 1:nsamples[ind]
       samples[i] = swapbytes(read(buff, NUMBER_TYPE))
