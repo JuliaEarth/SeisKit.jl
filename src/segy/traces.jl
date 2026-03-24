@@ -42,27 +42,25 @@ function traces(io::IO, trh, inds=1:length(trh))
   # load file into RAM if size permits
   buff = filesize(io) < Sys.free_memory() ÷ 2 ? IOBuffer(read(seekstart(io))) : io
 
-  # seek start of trace headers
-  seek(buff, TEXTUAL_HEADER_SIZE + BINARY_HEADER_SIZE + nextendedheaders(buff) * EXTENDED_HEADER_SIZE)
+  # start of trace headers
+  START = TEXTUAL_HEADER_SIZE + BINARY_HEADER_SIZE + nextendedheaders(buff) * EXTENDED_HEADER_SIZE
 
   # consume trace bytes
-  prev = 1
   @inbounds for (j, ind) in enumerate(sortedinds)
-    # skip all data before the current trace
-    for k in prev:(ind - 1)
-      skip(buff, TRACE_HEADER_SIZE + nsamples[k] * sizeof(NUMBER_TYPE))
+    # seek current trace
+    TRACE = START + sum(1:(ind - 1), init=0) do k
+      TRACE_HEADER_SIZE + nsamples[k] * sizeof(NUMBER_TYPE)
     end
+    seek(buff, TRACE)
 
-    # skip trace header of current trace
+    # skip trace header
     skip(buff, TRACE_HEADER_SIZE)
 
-    # read trace samples of current trace
+    # read trace samples
     samples = data[j]
     for i in 1:nsamples[ind]
       samples[i] = swapbytes(read(buff, NUMBER_TYPE))
     end
-
-    prev = ind + 1
   end
 
   data
