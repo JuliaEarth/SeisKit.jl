@@ -14,4 +14,10 @@
   gathers = Segy.gathers(io, fields, lazy=true)
   @test length(gathers) == 151
   close(io)
+
+  # methods with a single field for convenience
+  gathers = Segy.gathers(fname, "CROSSLINE_NUMBER")
+  @test length(gathers) == 151
+  gathers = Segy.gathers(fname, :CROSSLINE_NUMBER)
+  @test length(gathers) == 151
 end

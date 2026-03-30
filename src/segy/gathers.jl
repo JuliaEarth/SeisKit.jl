@@ -3,9 +3,10 @@
 # ------------------------------------------------------------------
 
 """
-    gathers(fname::AbstractString, fields=(:ORIGINAL_FIELD_RECORD_NUMBER,); lazy=false)
+    gathers(fname::AbstractString[, fields]; lazy=false)
 
 Load SEG-Y gathers from the file `fname` based on the trace header `fields`.
+By default, gathers are grouped by the `"ORIGINAL_FIELD_RECORD_NUMBER"`.
 
 Optionally, specify `lazy=true` to load gathers lazily when the file is too
 large to fit in memory.
@@ -25,9 +26,10 @@ function gathers(fname::AbstractString, fields=(:ORIGINAL_FIELD_RECORD_NUMBER,);
 end
 
 """
-    gathers(io::IO, fields=(:ORIGINAL_FIELD_RECORD_NUMBER,); lazy=false)
+    gathers(io::IO[, fields]; lazy=false)
 
 Load SEG-Y gathers from the IO stream `io` based on the trace header `fields`.
+By default, gathers are grouped by the `"ORIGINAL_FIELD_RECORD_NUMBER"`.
 
 Optionally, specify `lazy=true` to load gathers lazily when the file is too
 large to fit in memory.
@@ -60,3 +62,9 @@ function gathers(io::IO, fields=(:ORIGINAL_FIELD_RECORD_NUMBER,); lazy=false)
 
   (gather(val) for val in unique(vals))
 end
+
+# methods with single field for convenience
+gathers(fname::AbstractString, field::AbstractString; lazy=false) = gathers(fname, (field,); lazy)
+gathers(fname::AbstractString, field::Symbol; lazy=false) = gathers(fname, (field,); lazy)
+gathers(io::IO, field::AbstractString; lazy=false) = gathers(io, (field,); lazy)
+gathers(io::IO, field::Symbol; lazy=false) = gathers(io, (field,); lazy)
