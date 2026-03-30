@@ -1,6 +1,7 @@
 name: Format suggestions
 on:
   pull_request
+
 jobs:
   code-style:
     runs-on: ubuntu-latest
