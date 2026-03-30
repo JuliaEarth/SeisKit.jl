@@ -55,4 +55,7 @@ include("segy/report.jl")
 include("segy/load.jl")
 include("segy/save.jl")
 
+# utility functions
+include("segy/gathers.jl")
+
 end
