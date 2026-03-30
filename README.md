@@ -586,6 +586,24 @@ julia> grid = Segy.grid(seismic)
 An optional `velocity` value can be provided to scale the time/depth axis.
 By default, the velocity is set to `4000` m/s (marine sedimentary rocks).
 
+### Grouping traces into gathers
+
+The `Segy.gathers` function can be used to load groups of traces with common
+fields in their trace headers (i.e., pre-stack gathers). If the file is too
+large to fit in memory, it can be loaded with the `lazy` option enabled:
+
+```julia
+julia> fname = "test/data/stacked2Drev1.sgy"
+julia> fields = ("INLINE_NUMBER", "CROSSLINE_NUMBER")
+julia> gathers = Segy.gathers(fname, fields)
+julia> first(gathers)
+SEG-Y Dataset (rev 1.0)
+├─ Nᵒ traces: 51
+├─ Nᵒ samples: 351 (fixed)
+├─ Inlines: 0 (fixed)
+└─ X-lines: 7200 (fixed)
+```
+
 ### Troubleshooting
 
 We provide the `Segy.report` function to report header information
