@@ -10,8 +10,19 @@ Load SEG-Y gathers from the file `fname` based on the trace header `fields`.
 Optionally, specify `lazy=true` to load gathers lazily when the file is too
 large to fit in memory.
 """
-gathers(fname::AbstractString, fields=(:ORIGINAL_FIELD_RECORD_NUMBER,); lazy=false) =
+function gathers(fname::AbstractString, fields=(:ORIGINAL_FIELD_RECORD_NUMBER,); lazy=false)
+  lazy && error("""
+    Cannot load gathers lazily from a file name.
+
+    Please open an IO stream manually with `io = open(fname)`
+    and then call `gathers(io, fields; lazy=true)` to load
+    gathers lazily.
+
+    After the gathers are consumed through iteration, make
+    sure to close the IO stream with `close(io)`.
+    """)
   open(io -> gathers(io, fields; lazy), fname)
+end
 
 """
     gathers(io::IO, fields=(:ORIGINAL_FIELD_RECORD_NUMBER,); lazy=false)
