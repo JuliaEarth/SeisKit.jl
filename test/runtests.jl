@@ -23,6 +23,9 @@ testfiles = [
   # dataset tests
   "segy/dataset.jl",
 
+  # gathers tests
+  "segy/gathers.jl",
+
   # utility tests
   "segy/utils.jl"
 ]
