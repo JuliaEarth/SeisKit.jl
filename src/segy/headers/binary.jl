@@ -114,7 +114,7 @@ end
 function section2(::Type{BinaryHeader})
   fields = fieldnames(BinaryHeader)
   endian = findfirst(==(:ENDIAN_CONSTANT), fields)
-  fields[endian+1:end]
+  fields[(endian + 1):end]
 end
 
 # write SEG-Y binary header to IO stream

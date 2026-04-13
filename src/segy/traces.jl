@@ -24,9 +24,6 @@ function traces(io::IO, trh, inds=1:length(trh))
   # swap bytes if necessary
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
-  # sort trace indices to read traces in order
-  sortedinds = sort(inds)
-
   # number type for samples
   NUMBER_TYPE = numbertype(io)
 
@@ -37,7 +34,7 @@ function traces(io::IO, trh, inds=1:length(trh))
   nsamples = Int.(replace(trh.SAMPLES_IN_TRACE, 0 => SAMPLES_PER_TRACE))
 
   # pre-allocate array of traces
-  data = [Vector{Float64}(undef, nsamples[ind]) for ind in sortedinds]
+  data = [Vector{Float64}(undef, nsamples[ind]) for ind in inds]
 
   # load file into RAM if size permits
   buff = filesize(io) < Sys.free_memory() ÷ 2 ? IOBuffer(read(seekstart(io))) : io
@@ -47,7 +44,8 @@ function traces(io::IO, trh, inds=1:length(trh))
 
   # consume trace bytes
   prev = 1
-  @inbounds for (j, ind) in enumerate(sortedinds)
+  perm = sortperm(inds)
+  @inbounds for (j, ind) in enumerate(inds[perm])
     # skip all data before the current trace
     for k in prev:(ind - 1)
       skip(buff, TRACE_HEADER_SIZE + nsamples[k] * sizeof(NUMBER_TYPE))
@@ -57,7 +55,7 @@ function traces(io::IO, trh, inds=1:length(trh))
     skip(buff, TRACE_HEADER_SIZE)
 
     # read trace samples of current trace
-    samples = data[j]
+    samples = data[perm[j]]
     for i in 1:nsamples[ind]
       samples[i] = swapbytes(read(buff, NUMBER_TYPE))
     end
