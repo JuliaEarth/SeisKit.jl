@@ -189,5 +189,5 @@ function Base.show(io::IO, ::MIME"text/plain", dataset::Dataset)
   println(io, "├─ Nᵒ traces: ", ntraces)
   println(io, "├─ Nᵒ samples: ", text(tmin, tmax))
   println(io, "├─ Inlines: ", text(imin, imax))
-  print(io,   "└─ X-lines: ", text(xmin, xmax))
+  print(io, "└─ X-lines: ", text(xmin, xmax))
 end

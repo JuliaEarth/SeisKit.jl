@@ -102,8 +102,7 @@ function _numbertype(io::IO)
       The Julia packages FixedPointNumbers.jl and
       BitIntegers.jl could be added as dependencies
       to implement this support.
-      """
-    )
+      """)
   end
   NumberType(type)
 end

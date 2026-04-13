@@ -46,10 +46,11 @@ function printheaders(th, bh, eh, trh)
       push!(maximum, max)
     end
   end
-  pretty_table((; field, minimum, maximum);
+  pretty_table(
+    (; field, minimum, maximum);
     title="SEG-Y Trace Header Summary (non-zero fields only)",
     fit_table_in_display_vertically=false,
-    alignment=:l,
+    alignment=:l
   )
 end
 
@@ -57,7 +58,9 @@ function reportissues(th, bh, eh, trh)
   issues = String[]
 
   if bh.TRACE_SORTING_CODE < 1
-    push!(issues, """
+    push!(
+      issues,
+      """
       - Detected TRACE_SORTING_CODE < 1 in binary header.
         The value should be greater than or equal to 1
         to indicate the type of ensemble stored in the
@@ -67,7 +70,9 @@ function reportissues(th, bh, eh, trh)
   end
 
   if any(iszero, trh.SAMPLES_IN_TRACE)
-    push!(issues, """
+    push!(
+      issues,
+      """
       - Detected trace headers with SAMPLES_IN_TRACE = 0.
         The value SAMPLES_PER_TRACE from the binary header
         should be copied to all trace headers.
@@ -77,7 +82,9 @@ function reportissues(th, bh, eh, trh)
 
   if bh.FIXED_LENGTH_TRACE_FLAG > 0
     if !allequal(trh.SAMPLES_IN_TRACE)
-      push!(issues, """
+      push!(
+        issues,
+        """
         - Detected FIXED_LENGTH_TRACE_FLAG > 0 in binary header
           with varying SAMPLES_IN_TRACE in trace headers.
           The flag should be set to 0 to indicate variable
@@ -85,7 +92,9 @@ function reportissues(th, bh, eh, trh)
         """
       )
     elseif !all(==(bh.SAMPLES_PER_TRACE), trh.SAMPLES_IN_TRACE)
-      push!(issues, """
+      push!(
+        issues,
+        """
         - Detected FIXED_LENGTH_TRACE_FLAG > 0 in binary header
           with SAMPLES_IN_TRACE in trace headers different
           from SAMPLES_PER_TRACE in binary header. The value
@@ -99,7 +108,9 @@ function reportissues(th, bh, eh, trh)
   for field in keys(binaryoptions)
     value = getfield(bh, field)
     if value ∉ binaryoptions[field]
-      push!(issues, """
+      push!(
+        issues,
+        """
         - Detected $field = $value in binary header.
           $field should be $(join(binaryoptions[field], ", ", " or ")).
         """
@@ -117,12 +128,9 @@ function reportissues(th, bh, eh, trh)
     print(styled"""
       {red:You can fix most of these issues with `Segy.save(...)`
       after loading the data with `Segy.load(...)`.}
-      """
-    )
+      """)
   end
 end
 
 # valid options for binary fields
-const binaryoptions = Dict(
-  :FIXED_LENGTH_TRACE_FLAG => (0, 1)
-)
+const binaryoptions = Dict(:FIXED_LENGTH_TRACE_FLAG => (0, 1))
