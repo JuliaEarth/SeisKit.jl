@@ -118,22 +118,26 @@ function section2(::Type{BinaryHeader})
 end
 
 # write SEG-Y binary header to IO stream
-function Base.write(io::IO, header::BinaryHeader)
+function writeswap(io::IO, header::BinaryHeader, swapbytes::Function)
   # write section 1 (bytes 3201 to 3300)
   for field in section1(BinaryHeader)
-    write(io, getfield(header, field))
+    value = getfield(header, field)
+    write(io, swapbytes(value))
   end
 
   # write unassigned section (200 bytes)
-  write(io, zeros(UInt8, 200))
+  value = zeros(UInt8, 200)
+  write(io, swapbytes(value))
 
   # write section 2 (bytes 3501 to 3532)
   for field in section2(BinaryHeader)
-    write(io, getfield(header, field))
+    value = getfield(header, field)
+    write(io, swapbytes(value))
   end
 
   # write unassigned section (bytes 3533 to 3600)
-  write(io, zeros(UInt8, 68))
+  value = zeros(UInt8, 68)
+  write(io, swapbytes(value))
 end
 
 # display SEG-Y binary header in pretty table format

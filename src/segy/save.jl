@@ -31,18 +31,21 @@ function save(io::IO, dataset::Dataset)
   # swap bytes if necessary
   swapbytes = bh₂.ENDIAN_CONSTANT == BIG_ENDIAN ? hton : htol
 
+  # number type for samples
+  numbertype = code2type(bh₂.SAMPLE_FORMAT_CODE)
+
   # write textual header
   write(io, th₂)
 
   # write binary header
-  write(io, bh₂)
+  writeswap(io, bh₂, swapbytes)
 
   # write extended headers
   foreach(h -> write(io, h), eh₂)
 
   # write trace headers and data
   for (h, t) in zip(trh₂, trd)
-    write(io, h)
-    write(io, map(Float32, t))
+    writeswap(io, h, swapbytes)
+    write(io, map(swapbytes ∘ numbertype, t))
   end
 end

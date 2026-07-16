@@ -214,14 +214,16 @@ function rawcoords(header::TraceHeader)
 end
 
 # write SEG-Y trace header to IO stream
-function Base.write(io::IO, header::TraceHeader)
+function writeswap(io::IO, header::TraceHeader, swapbytes::Function)
   # write fields of trace header
   for field in fieldnames(TraceHeader)
-    write(io, getfield(header, field))
+    value = getfield(header, field)
+    write(io, swapbytes(value))
   end
 
   # write unassigned section (bytes 233 to 240)
-  write(io, zeros(UInt8, 8))
+  value = zeros(UInt8, 8)
+  write(io, swapbytes(value))
 end
 
 # display SEG-Y trace header in pretty table format
