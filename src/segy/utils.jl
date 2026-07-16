@@ -2,11 +2,11 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # ------------------------------------------------------------------
 
-# big-endian and little-endian constants
+# endianness constants
 const BIG_ENDIAN = 67305985
 const LITTLE_ENDIAN = 33620995
 
-# IEEE float point constants
+# IEEE floating point constants
 const IEEE_FLOAT32 = 5
 const IEEE_FLOAT64 = 6
 
