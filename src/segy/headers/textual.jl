@@ -26,7 +26,7 @@ function textualheader(io::IO)
   content = decode(bytes, encoding)
 
   # return textual header
-  TextualHeader(content)
+  TextualHeader(content, encoding)
 end
 
 # ------------------
@@ -34,12 +34,13 @@ end
 # ------------------
 
 """
-    TextualHeader(content)
+    TextualHeader(content, encoding)
 
-SEG-Y textual header with string `content`.
+SEG-Y textual header with string `content` in a given `encoding`.
 """
 struct TextualHeader
   content::String
+  encoding::String
 end
 
 """
@@ -147,7 +148,7 @@ function datumstrings(header::TextualHeader)
 end
 
 # write SEG-Y textual header to IO stream
-Base.write(io::IO, header::TextualHeader) = write(io, encode(header.content, "ASCII"))
+Base.write(io::IO, header::TextualHeader) = write(io, encode(header.content, header.encoding))
 
 # display SEG-Y textual header in pretty format
 Base.show(io::IO, header::TextualHeader) = print(io, replace(header.content, r"(C\d+)" => s"\n\1"))
