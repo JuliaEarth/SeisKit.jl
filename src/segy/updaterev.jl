@@ -21,6 +21,5 @@ function updaterev(th, bh, eh, trh)
   # update number type to IEEE Float64
   bh′.SAMPLE_FORMAT_CODE = 6
 
-  # currently no updates implemented
   th, bh′, eh, trh
 end

@@ -32,6 +32,5 @@ function fixissues(th, bh, eh, trh)
     bh′.FIXED_LENGTH_TRACE_FLAG = 1
   end
 
-  # currently no fixes implemented
   th, bh′, eh, trh′
 end
