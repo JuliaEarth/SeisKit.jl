@@ -3,11 +3,11 @@
 # ------------------------------------------------------------------
 
 """
-    fixissues(th, bh, eh, trh)
+    fixes(th, bh, eh, trh)
 
 Fix known issues in SEG-Y headers.
 """
-function fixissues(th, bh, eh, trh)
+function fixes(th, bh, eh, trh)
   # copy inputs to avoid side effects
   bh′ = deepcopy(bh)
   trh′ = deepcopy(trh)

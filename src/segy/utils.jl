@@ -2,6 +2,14 @@
 # Licensed under the MIT License. See LICENSE in the project root.
 # ------------------------------------------------------------------
 
+# big-endian and little-endian constants
+const BIG_ENDIAN = 67305985
+const LITTLE_ENDIAN = 33620995
+
+# IEEE float point constants
+const IEEE_FLOAT32 = 5
+const IEEE_FLOAT64 = 6
+
 # tells whether the SEG-Y file is big-endian
 isbigendian(fname::AbstractString) = open(isbigendian, fname)
 
@@ -14,7 +22,7 @@ function isbigendian(io::IO)
   # conclude that it is big-endian, regardless of
   # the SEG-Y revision.
   seek(io, 3296)
-  read(io, UInt32) != 33620995
+  read(io, UInt32) != LITTLE_ENDIAN
 end
 
 # SEG-Y major and minor version
@@ -53,7 +61,14 @@ function _numbertype(io::IO)
 
   # SEG-Y revision 1.0 introduced the
   # sample format code at bytes 3225-3226
-  # to indicate the floating point type:
+  # to indicate the floating point type
+  seek(io, 3224)
+  code = swapbytes(read(io, UInt16))
+  type = code2type(code)
+  NumberType(type)
+end
+
+function code2type(code)
   # 1: 4-byte IBM floating point
   # 2: 4-byte, twos's complement integer
   # 3: 2-byte, twos's complement integer
@@ -68,9 +83,7 @@ function _numbertype(io::IO)
   # 12: 8-byte, unsigned integer (since revision 2.0)
   # 15: 3-byte, unsigned integer (since revision 2.0)
   # 16: 1-byte, unsigned integer (since revision 2.0)
-  seek(io, 3224)
-  code = swapbytes(read(io, UInt16))
-  type = if code == 1
+  if code == 1
     IBMFloat32
   elseif code == 2
     Int32
@@ -104,7 +117,6 @@ function _numbertype(io::IO)
       to implement this support.
       """)
   end
-  NumberType(type)
 end
 
 # wrapped union to avoid performance issues

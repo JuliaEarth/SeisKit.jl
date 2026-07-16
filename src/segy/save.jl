@@ -23,10 +23,13 @@ function save(io::IO, dataset::Dataset)
   trd = dataset.traces
 
   # fix issues with headers
-  th₁, bh₁, eh₁, trh₁ = fixissues(thₒ, bhₒ, ehₒ, trhₒ)
+  th₁, bh₁, eh₁, trh₁ = fixes(thₒ, bhₒ, ehₒ, trhₒ)
 
-  # update to rev 2.1 compliance
-  th₂, bh₂, eh₂, trh₂ = updaterev(th₁, bh₁, eh₁, trh₁)
+  # set SEG-Y revision
+  th₂, bh₂, eh₂, trh₂ = setrev(th₁, bh₁, eh₁, trh₁)
+
+  # swap bytes if necessary
+  swapbytes = bh₂.ENDIAN_CONSTANT == BIG_ENDIAN ? hton : htol
 
   # write textual header
   write(io, th₂)
@@ -40,6 +43,6 @@ function save(io::IO, dataset::Dataset)
   # write trace headers and data
   for (h, t) in zip(trh₂, trd)
     write(io, h)
-    write(io, t)
+    write(io, map(Float32, t))
   end
 end
