@@ -126,8 +126,7 @@ function writeswap(io::IO, header::BinaryHeader, swapbytes::Function)
   end
 
   # write unassigned section (200 bytes)
-  value = zeros(UInt8, 200)
-  write(io, swapbytes(value))
+  write(io, zeros(UInt8, 200))
 
   # write section 2 (bytes 3501 to 3532)
   for field in section2(BinaryHeader)
@@ -136,8 +135,7 @@ function writeswap(io::IO, header::BinaryHeader, swapbytes::Function)
   end
 
   # write unassigned section (bytes 3533 to 3600)
-  value = zeros(UInt8, 68)
-  write(io, swapbytes(value))
+  write(io, zeros(UInt8, 68))
 end
 
 # display SEG-Y binary header in pretty table format

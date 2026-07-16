@@ -222,8 +222,7 @@ function writeswap(io::IO, header::TraceHeader, swapbytes::Function)
   end
 
   # write unassigned section (bytes 233 to 240)
-  value = zeros(UInt8, 8)
-  write(io, swapbytes(value))
+  write(io, zeros(UInt8, 8))
 end
 
 # display SEG-Y trace header in pretty table format
