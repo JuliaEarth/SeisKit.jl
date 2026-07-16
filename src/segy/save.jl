@@ -22,6 +22,17 @@ function save(io::IO, dataset::Dataset)
   trhₒ = dataset.traceheaders
   trd = dataset.traces
 
+  # warn in case of NaN values because they are
+  # not part of the SEG-Y standard and each software
+  # may handle them differently (e.g., some may throw an error)
+  if any(any(isnan, t) for t in trd)
+    @warn """NaN values found in traces.
+
+    They will be saved as-is, but may not be handled
+    correctly by other software.
+    """
+  end
+
   # fix issues with headers
   th₁, bh₁, eh₁, trh₁ = fixes(thₒ, bhₒ, ehₒ, trhₒ)
 
