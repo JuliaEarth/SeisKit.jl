@@ -4,4 +4,6 @@
   Segy.save(file, seis1)
   seis2 = Segy.load(file)
   @test seis1.traces == seis2.traces
+  seis2.traces[1][1] = NaN
+  @test_logs (:warn, r"NaN values found in traces.") Segy.save(file, seis2)
 end
