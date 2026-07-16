@@ -469,18 +469,12 @@ some criteria (e.g., traces in the same CMP gather). These
 indices can then be used in `Segy.traces` calls.
 
 The `Segy.save` function can be used to write the data back to
-a file that is compliant with SEG-Y rev 2.1:
+a file that is compliant with SEG-Y rev 1.0 or rev 2.1 depending
+on the presence of extended headers:
 
 ```julia
 julia> Segy.save("path/to/newfile.sgy", seismic)
 ```
-
-We do not support saving in older revisions because:
-
-> The SEG Technical Standards Committee strongly
-> encourages producers and users of SEG-Y data sets
-> to move to the revised (2.1) standard in an
-> expeditious fashion.
 
 ### Retrieving trace positions
 
@@ -736,7 +730,7 @@ you can modify the `Segy.headers`, create a `Segy.Dataset`
 with the modified headers and traces, and then save it with
 `Segy.save`. The `Segy.save` function fixes most issues found
 in the headers using the `Segy.fixissues` function before
-writing the new file in SEG-Y rev 2.1.
+writing the new file in SEG-Y rev 1.0 or rev 2.1.
 
 Please consult the docstrings of all these functions for more details.
 
