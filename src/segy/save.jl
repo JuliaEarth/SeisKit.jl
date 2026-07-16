@@ -29,7 +29,9 @@ function save(io::IO, dataset::Dataset)
     @warn """NaN values found in traces.
 
     They will be saved as-is, but may not be handled
-    correctly by other software.
+    correctly by other software. If you plan to share
+    this SEG-Y file, consider replacing NaN values with
+    a valid sentinel value (e.g., 0.0).
     """
   end
 
