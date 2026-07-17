@@ -24,7 +24,7 @@ function save(io::IO, dataset::Dataset)
 
   # warn in case of NaN values because they are
   # not part of the SEG-Y standard and each software
-  # may handle them differently (e.g., some may throw an error)
+  # may handle them differently (e.g., may throw an error)
   if any(any(isnan, t) for t in trd)
     @warn """NaN values found in traces.
 
