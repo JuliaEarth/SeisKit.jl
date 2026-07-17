@@ -30,8 +30,9 @@ function save(io::IO, dataset::Dataset)
 
     They will be saved as-is, but may not be handled
     correctly by other software. If you plan to share
-    this SEG-Y file, consider replacing NaN values with
-    a valid sentinel value (e.g., 0.0).
+    this SEG-Y file, consider replacing NaN with a
+    sentinel value that can be represented in both
+    IBM and IEEE floating-point format (e.g., 0.0).
     """
   end
 
