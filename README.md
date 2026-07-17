@@ -729,7 +729,7 @@ If `Segy.report` shows issues that you want to fix manually,
 you can modify the `Segy.headers`, create a `Segy.Dataset`
 with the modified headers and traces, and then save it with
 `Segy.save`. The `Segy.save` function fixes most issues found
-in the headers using the `Segy.fixissues` function before
+in the headers using the `Segy.fixes` function before
 writing the new file in SEG-Y rev 1.0 or rev 2.1.
 
 Please consult the docstrings of all these functions for more details.

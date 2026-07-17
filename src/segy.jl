@@ -15,7 +15,7 @@ The main functions defined in this module are:
 - [`Segy.save`](@ref): saves seismic structs into SEG-Y files compliant with rev 2.1.
 
 Additional functions are provided to fix common issues found in SEG-Y headers
-(`Segy.fixissues`), read trace headers only (`Segy.traceheaders`), and more.
+(`Segy.fixes`), read trace headers only (`Segy.traceheaders`), and more.
 """
 module Segy
 
