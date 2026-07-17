@@ -43,10 +43,6 @@ include("segy/ioutils.jl")
 include("segy/headers.jl")
 include("segy/traces.jl")
 
-# header improvements
-include("segy/fixes.jl")
-include("segy/setrev.jl")
-
 # SEG-Y datasets
 include("segy/dataset.jl")
 
