@@ -44,7 +44,7 @@ function save(io::IO, dataset::Dataset)
   swapbytes = bh′.ENDIAN_CONSTANT == BIG_ENDIAN ? hton : htol
 
   # floating point type
-  floattype = code2type(bh′.SAMPLE_FORMAT_CODE)
+  floattype = numbertype(bh′.SAMPLE_FORMAT_CODE)
 
   # write textual header
   write(io, th)

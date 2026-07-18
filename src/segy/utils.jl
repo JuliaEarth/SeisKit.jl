@@ -64,11 +64,15 @@ function _numbertype(io::IO)
   # to indicate the floating point type
   seek(io, 3224)
   code = swapbytes(read(io, UInt16))
-  type = code2type(code)
+  type = _code2type(code)
   NumberType(type)
 end
 
-function code2type(code)
+numbertype(code::UInt16) = unwrap(_numbertype(code))
+
+_numbertype(code::UInt16) = NumberType(_code2type(code))
+
+function _code2type(code)
   # 1: 4-byte IBM floating point
   # 2: 4-byte, twos's complement integer
   # 3: 2-byte, twos's complement integer
