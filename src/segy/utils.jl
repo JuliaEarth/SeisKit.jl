@@ -81,8 +81,8 @@ function _numbertype(io::IO)
     @warn "SEG-Y revision $majorversion.0 files do not support sample format code $code"
   end
 
-  type = _code2type(code)
-  NumberType(type)
+  # number type for the sample format code
+  NumberType(_code2type(code))
 end
 
 numbertype(code::UInt16) = unwrap(_numbertype(code))
