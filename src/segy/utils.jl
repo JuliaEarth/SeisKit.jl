@@ -56,16 +56,33 @@ function _numbertype(io::IO)
   # swap bytes if necessary
   swapbytes = isbigendian(io) ? ntoh : ltoh
 
-  # SEG-Y revision 0.0 uses 4-byte IBM floating point
-  version(io).major == 0 && return NumberType(IBMFloat32)
+  # get the SEG-Y major version for validations
+  majorversion = version(io).major
 
   # SEG-Y revision 1.0 introduced the
   # sample format code at bytes 3225-3226
   # to indicate the floating point type
   seek(io, 3224)
   code = swapbytes(read(io, UInt16))
-  type = _code2type(code)
-  NumberType(type)
+
+  # SEG-Y revision 0.0 does not support
+  # sample format code, so we must emit
+  # a warning if the code is not null
+  # or 1 (4-byte IBM floating point)
+  if majorversion == 0 && code > 1
+    @warn "SEG-Y revision 0.0 files must use 4-byte IBM floating point (code 1)"
+  end
+
+  # SEG-Y revision 2.0 introduced more
+  # sample format codes, so we must emit
+  # a warning if the code is not supported
+  # by older revisions of the standard
+  if majorversion < 2 && code ∈ (6, 7, 9, 10, 11, 12, 15, 16)
+    @warn "SEG-Y revision $majorversion.0 files do not support sample format code $code"
+  end
+
+  # number type for the sample format code
+  NumberType(_code2type(code))
 end
 
 numbertype(code::UInt16) = unwrap(_numbertype(code))
