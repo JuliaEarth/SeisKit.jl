@@ -11,7 +11,7 @@
   @test Segy.ndims(d) == 2
   @test Segy.image(d) isa Matrix{Float64}
   @test Segy.segment(d) == let
-    points = sort(Segy.positions(d))
+    points = Segy.positions(d)
     Segment(first(points), last(points))
   end
 

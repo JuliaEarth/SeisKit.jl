@@ -42,12 +42,8 @@ function image(dataset::Dataset)
   # make sure dataset is 2D
   ndims(dataset) == 2 || error("Cannot convert 3D SEG-Y dataset to a 2D image")
 
-  # sort traces by their positions
-  inds = sortperm(positions(dataset))
-  traces = @view dataset.traces[inds]
-
   # return matrix of samples
-  reduce(hcat, traces)
+  reduce(hcat, dataset.traces)
 end
 
 """
@@ -95,7 +91,7 @@ Retrieve the segment defined by the positions of the traces in a 2D SEG-Y `datas
 """
 function segment(dataset::Dataset)
   ndims(dataset) == 2 || error("Cannot extract 2D segment from positions of 3D SEG-Y dataset")
-  points = sort(positions(dataset))
+  points = positions(dataset)
   Segment(first(points), last(points))
 end
 
