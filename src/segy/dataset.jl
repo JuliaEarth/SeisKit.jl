@@ -60,7 +60,7 @@ function grid(dataset::Dataset; velocity=4000.0)
   ndims(dataset) == 2 || error("Cannot extract 2D grid from 3D SEG-Y dataset")
 
   # extract x and y coordinates
-  xy = map(sort(positions(dataset))) do p
+  xy = map(positions(dataset)) do p
     c = convert(Cartesian, Meshes.coords(p))
     c.x, c.y
   end
